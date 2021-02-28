@@ -1,0 +1,25 @@
+.rendu {
+  color: green;
+  border: 1px solid green;
+  padding: 5px;
+}
+
+.nonrendu {
+  color: red;
+  background-color: yellow;
+  border: 2px dashed orange;
+  padding: 5px;
+}
+
+.gros {
+  font-size: 20px;;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ajouterBtn {
+  align-self: flex-end;
+ }
