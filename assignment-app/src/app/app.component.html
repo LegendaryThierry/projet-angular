@@ -1,6 +1,18 @@
-<h1>
-  <nav><a routerLink="/home">{{title}}</a></nav>
-</h1>
+<!-- BARRE DE MENU -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1 [routerLink]="['/home']">{{title}}</h1>
+    <span class="menu-spacer"></span>
+    <div *ngIf="user == null">
+      <button mat-raised-button (click)="openConnexionDialog()"> Login </button>
+      <button mat-raised-button> Register </button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
 
+<!-- router-outlet désigne le composant défini par le routeur -->
 <router-outlet></router-outlet>
 

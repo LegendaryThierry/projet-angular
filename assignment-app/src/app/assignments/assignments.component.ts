@@ -8,17 +8,17 @@ import { Assignment } from './assignment.model';
   styleUrls: ['./assignments.component.css'],
 })
 export class AssignmentsComponent implements OnInit {
-  assignments:Assignment[];
+  assignments: Assignment[];
 
-  constructor(private assignmentsService:AssignmentsService) {}
+  constructor(private assignmentsService: AssignmentsService) {}
 
   ngOnInit(): void {
-    
+
     this.assignmentsService.getAssignments()
-      .subscribe((assignments:Assignment[]) => {
+      .subscribe((assignments: Assignment[]) => {
         // appelé que quand les données sont prêtes
         this.assignments = assignments;
-        console.log("données reçues....")
+        console.log('données reçues....')
       });
 
       /* peu utilisé par les devs angular

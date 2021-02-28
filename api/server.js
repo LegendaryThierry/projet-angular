@@ -2,13 +2,14 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
+const user = require('./routes/users');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //mongoose.set('debug', true);
 
 //URI de connexion à la base de données MongoDB
-const uri = 'mongodb+srv://mb:toto@cluster0.xtr0u.mongodb.net/assignments?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://admin:zidane@cluster0.9oqen.mongodb.net/assignments?retryWrites=true&w=majority';
 
 const options = {
   useNewUrlParser: true,
@@ -43,6 +44,7 @@ let port = process.env.PORT || 8010;
 // les routes
 const prefix = '/api';
 
+// ----- ASSIGNMENTS ROUTES -----
 app.route(prefix + '/assignments')
   .get(assignment.getAssignments)
   .post(assignment.postAssignment)
@@ -51,6 +53,15 @@ app.route(prefix + '/assignments')
 app.route(prefix + '/assignments/:id')
   .get(assignment.getAssignment)
   .delete(assignment.deleteAssignment);
+
+// ----- USERS ROUTES -----
+app.route(prefix + '/users')
+    .get(user.getUsers) //Si le service reçoit un GET sur cette URL. Quelle fonction doit-il exécuter ?
+    .post(user.postUser)
+    .put(user.updateUser);
+
+app.route(prefix + '/users/findUser')
+    .post(user.findUser);
   
 
 // On démarre le serveur

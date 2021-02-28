@@ -13,39 +13,39 @@ export class AddAssignmentComponent implements OnInit {
   dateDeRendu = null;
   nomDevoir = '';
 
-  constructor(private assignmentsService:AssignmentsService,
-              private router:Router) {}
+  constructor(private assignmentsService: AssignmentsService,
+              private router: Router) {}
 
   ngOnInit(): void {}
 
-  onSubmit(event) {
+  onSubmit(event): void {
     event.preventDefault();
 
     // les deux champs sont obligatoires...
-    if(!this.nomDevoir) return;
-    if(!this.dateDeRendu) return;
+    if (!this.nomDevoir) { return; }
+    if (!this.dateDeRendu) { return; }
 
     console.log('Bouton cliqué');
     console.log('Nom = ' + this.nomDevoir);
     console.log('Date = ' + this.dateDeRendu);
 
-    let newAssignment = new Assignment();
+    const newAssignment = new Assignment();
     newAssignment.nom = this.nomDevoir;
     newAssignment.dateDeRendu = new Date(this.dateDeRendu);
     newAssignment.rendu = false;
 
-    //this.assignments.push(nouvelAssignment);
+    // this.assignments.push(nouvelAssignment);
     // on ne peut accéder au tableau des assignments qui est dans le
     // composant père.... on va devoir trouver un moyen de lui
     // communiquer le nouvel assignment saisi dans le form
     // et lui dire de le rajouter au tableau
-    //this.nouvelAssignment.emit(newAssignment);
+    // this.nouvelAssignment.emit(newAssignment);
     this.assignmentsService.addAssignment(newAssignment)
     .subscribe(reponse => {
       console.log(reponse.message);
 
       // dire qu'on veut de nouveau afficher la liste
-      this.router.navigate(["/home"]);
-    })
+      this.router.navigate(['/home']);
+    });
   }
 }
