@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { User } from '../users/users.model';
+import { User } from '../models/users.model';
 import { LoggingService } from './logging.service';
 import {map, tap, catchError} from 'rxjs/operators';
 

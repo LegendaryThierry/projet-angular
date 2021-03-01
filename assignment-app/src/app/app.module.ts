@@ -57,7 +57,6 @@ import {Routes, RouterModule} from '@angular/router';
 import { EditAssigmentComponent } from './assignments/edit-assigment/edit-assigment.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { UsersComponent } from './users/users.component';
 import { ConnexionComponent } from './dialog/connexion/connexion.component';
 import { MainComponent } from './main/main.component';
 
@@ -72,7 +71,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [AppComponent, AssignmentsComponent, RenduDirective, AssignmentDetailComponent,
-    AddAssignmentComponent, EditAssigmentComponent, UsersComponent, ConnexionComponent, MainComponent],
+    AddAssignmentComponent, EditAssigmentComponent, ConnexionComponent, MainComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

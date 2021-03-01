@@ -3,6 +3,7 @@ let app = express();
 let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
 const user = require('./routes/users');
+const subject = require('./routes/subjects');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -56,12 +57,17 @@ app.route(prefix + '/assignments/:id')
 
 // ----- USERS ROUTES -----
 app.route(prefix + '/users')
-    .get(user.getUsers) //Si le service reçoit un GET sur cette URL. Quelle fonction doit-il exécuter ?
-    .post(user.postUser)
-    .put(user.updateUser);
+    .get(user.getUsers); //Si le service reçoit une requête sur cette URL. Quelle fonction doit-il exécuter ?
 
 app.route(prefix + '/users/findUser')
     .post(user.findUser);
+
+// ----- SUBJECTS ROUTES -----
+app.route(prefix + '/subjects')
+    .get(subject.getSubjects);
+
+app.route(prefix + '/subjects/findSubject')
+    .post(subject.findSubject);
   
 
 // On démarre le serveur

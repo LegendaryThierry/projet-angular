@@ -10,6 +10,9 @@
       <button mat-raised-button (click)="openConnexionDialog()"> Login </button>
       <button mat-raised-button> Register </button>
     </div>
+    <div *ngIf="user != null">
+      <button mat-raised-button (click)="disconnect()"> Disconnect </button>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
 
