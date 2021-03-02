@@ -3,7 +3,7 @@ const Subject = require('../model/subject');
 // Récupérer tous les subjects (GET)
 function getSubjects(req, res){
     Subject.find()
-        .populate("user")
+        .populate("teacher")
         .exec()//Nom de la clé que l'on veut populer
         .then(function(subjects){
             res.json(subjects);

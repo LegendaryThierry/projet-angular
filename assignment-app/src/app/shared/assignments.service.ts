@@ -14,7 +14,7 @@ export class AssignmentsService {
   constructor(private logginService: LoggingService,
               private http: HttpClient) {}
 
-  assignments: Assignment[] = [
+  /*assignments: Assignment[] = [
     {
       id: 1,
       nom: 'Devoir Angular No1',
@@ -33,7 +33,7 @@ export class AssignmentsService {
       dateDeRendu: new Date('01-30-2021'),
       rendu: false,
     },
-  ];
+  ];*/
 
   url = 'http://localhost:8010/api/assignments';
 

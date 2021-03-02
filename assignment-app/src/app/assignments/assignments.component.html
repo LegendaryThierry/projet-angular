@@ -8,7 +8,7 @@
   </div>
 
   <mat-list *ngFor="let a of assignments">
-    <nav>
+    <div>
       <a routerLink="/assignment/{{a.id}}">
         <h3 mat-subheader>{{a.dateDeRendu | date}}</h3>
 
@@ -24,7 +24,43 @@
           <mat-divider></mat-divider>
         </mat-list-item>
       </a>
-    </nav>
+    </div>
   </mat-list>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <ng-container matColumnDef="subjectTitle">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Matière </th>
+      <td mat-cell *matCellDef="let element"> {{element.subjectTitle}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="assignmentTitle">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom du devoir </th>
+      <td mat-cell *matCellDef="let element"> {{element.assignmentTitle}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rendu">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Rendu ? </th>
+      <td mat-cell *matCellDef="let element"> {{element.rendu}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateDeRendu">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date de rendu </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateDeRendu}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="note">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Note </th>
+      <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="remarque">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Remarque </th>
+      <td mat-cell *matCellDef="let element"> {{element.remarque}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
 
 </div>

@@ -4,8 +4,8 @@ let Schema = mongoose.Schema;
 let SubjectSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     title: String,
-    user : {
-        type: Schema.Types.ObjectId,
+    teacher : {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     }

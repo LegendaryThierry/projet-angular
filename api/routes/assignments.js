@@ -2,13 +2,16 @@ let Assignment = require('../model/assignment');
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
-    Assignment.find((err, assignments) => {
-        if(err){
-            res.send(err)
-        }
-
-        res.send(assignments);
-    });
+    Assignment.find()
+        .populate("eleve") //Nom de la clé que l'on veut populer
+        .populate("matiere")
+        .exec()
+        .then(function(subjects){
+            res.json(subjects);
+        })
+        .catch(function(err){
+            res.json(err);
+        });
 }
 
 // Récupérer un assignment par son id (GET)

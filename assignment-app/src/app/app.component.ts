@@ -15,14 +15,9 @@ export class AppComponent {
   user = null;
   connexionDialogRef: MatDialogRef<ConnexionComponent>; // Référence du Dialog pour pouvoir l'utiliser dans le composant fils
 
-  constructor(private connexionDialog: MatDialog, private router: Router, private subjectsService: SubjectsService) {}
+  constructor(private connexionDialog: MatDialog, private router: Router) {}
 
   openConnexionDialog(): void{
-
-    this.subjectsService.findSubject('Base de données').subscribe(subject => {
-      console.log(subject);
-    });
-
     this.connexionDialogRef = this.connexionDialog.open(ConnexionComponent);
 
     this.connexionDialogRef.afterClosed().subscribe(user => {
