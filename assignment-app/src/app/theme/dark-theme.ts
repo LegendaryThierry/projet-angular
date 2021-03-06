@@ -5,7 +5,7 @@ export const darkTheme: Theme = {
   properties: {
     '--background': '#1F2125',
     '--on-background': '#fff',
-    '--primary': 'darkblue',
+    '--primary': '#fff',
     '--on-primary': '#fff',
   }
 };
