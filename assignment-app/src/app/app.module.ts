@@ -59,6 +59,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { ConnexionComponent } from './dialog/connexion/connexion.component';
 import { MainComponent } from './main/main.component';
+import {ThemeModule} from './theme/theme.module';
+import {lightTheme} from './theme/light-theme';
+import {darkTheme} from './theme/dark-theme';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
@@ -132,6 +135,8 @@ const routes: Routes = [
     OverlayModule,
     PortalModule,
     ScrollingModule,
+    BrowserModule,
+    ThemeModule.forRoot({themes: [lightTheme, darkTheme], active: 'light'}),
   ],
   providers: [],
   bootstrap: [AppComponent],

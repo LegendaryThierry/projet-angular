@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ConnexionComponent} from './dialog/connexion/connexion.component';
 import {Router} from '@angular/router';
-import {UsersService} from "./shared/users.service";
-import {SubjectsService} from "./shared/subjects.service";
+import {UsersService} from './shared/users.service';
+import {SubjectsService} from './shared/subjects.service';
+import {ThemeService} from './theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent {
   user = null;
   connexionDialogRef: MatDialogRef<ConnexionComponent>; // Référence du Dialog pour pouvoir l'utiliser dans le composant fils
 
-  constructor(private connexionDialog: MatDialog, private router: Router) {}
+  constructor(private connexionDialog: MatDialog, private router: Router, private themeService: ThemeService) {}
 
   openConnexionDialog(): void{
     this.connexionDialogRef = this.connexionDialog.open(ConnexionComponent);
@@ -24,6 +25,14 @@ export class AppComponent {
       this.user = user;
       console.log(user);
     });
+  }
+  toggle(): void {
+    const active = this.themeService.getActiveTheme() ;
+    if (active.name === 'light') {
+      this.themeService.setTheme('dark');
+    } else {
+      this.themeService.setTheme('light');
+    }
   }
 
   disconnect(): void{
