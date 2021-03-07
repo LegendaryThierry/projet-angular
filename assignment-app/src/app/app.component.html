@@ -11,7 +11,7 @@
     <span class="menu-spacer"></span>
     <span>Dark Mode</span>
     <label class="switch">
-      <input type="checkbox">
+      <input type="checkbox" (click)="toggle()" >
       <span class="slider round"></span>
     </label>
     <div *ngIf="user == null">

@@ -9,7 +9,7 @@ import { Assignment } from '../../models/assignment.model';
   styleUrls: ['./edit-assigment.component.css']
 })
 export class EditAssigmentComponent implements OnInit {
-  assignment:Assignment;
+  assignment: Assignment;
   // pour les champs du formulaire
   nomAssignment:string;
   dateDeRendu: Date;
