@@ -1,11 +1,19 @@
 <!-- BARRE DE MENU -->
-<mat-toolbar color="primary">
+<div app-theme>
+  <div class="main container">
+
+  <mat-toolbar color="primary">
   <mat-toolbar-row>
     <button mat-icon-button>
       <mat-icon>menu</mat-icon>
     </button>
     <h1 [routerLink]="['/home']">{{title}}</h1>
     <span class="menu-spacer"></span>
+    <span>Dark Mode</span>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
     <div *ngIf="user == null">
       <button mat-raised-button (click)="openConnexionDialog()"> Login </button>
       <button mat-raised-button> Register </button>
@@ -18,4 +26,5 @@
 
 <!-- router-outlet désigne le composant défini par le routeur -->
 <router-outlet></router-outlet>
-
+  </div>
+</div>
