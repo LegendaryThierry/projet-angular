@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ConnexionComponent} from './dialog/connexion/connexion.component';
 import {NavigationEnd, Router} from '@angular/router';
+import {ThemeService} from './theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,17 @@ export class AppComponent implements OnInit{
   currentRoute = '';
   connexionDialogRef: MatDialogRef<ConnexionComponent>; // Référence du Dialog pour pouvoir l'utiliser dans le composant fils
 
-  constructor(private connexionDialog: MatDialog, private router: Router) {}
+  constructor(private connexionDialog: MatDialog, private router: Router, private themeService: ThemeService) {}
+
+  // tslint:disable-next-line:typedef
+  toggle() {
+    const active = this.themeService.getActiveTheme() ;
+    if (active.name === 'light') {
+      this.themeService.setTheme('dark');
+    } else {
+      this.themeService.setTheme('light');
+    }
+  }
 
   openConnexionDialog(): void{
     this.connexionDialogRef = this.connexionDialog.open(ConnexionComponent);
