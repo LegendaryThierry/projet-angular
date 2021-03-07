@@ -14,7 +14,7 @@ import {Subject} from '../../models/subjects.model';
 })
 export class AddAssignmentComponent implements OnInit {
   // champs de formulaire
-  dateDeRendu = null;
+  dateLimite = null;
   nomDevoir = '';
   subjects = [];
   teachers = [];
@@ -45,14 +45,14 @@ export class AddAssignmentComponent implements OnInit {
 
     console.log('----- Bouton Appuyé -----');
     console.log('Nom = ' + this.nomDevoir);
-    console.log('Date = ' + this.dateDeRendu);
+    console.log('Date = ' + this.dateLimite);
     console.log('Matière = ' + this.selectedSubject.title);
     console.log('Professeur = ' + this.selectedTeacher.first_name + ' ' + this.selectedTeacher.last_name);
     console.log('Eleves = ' + this.selectedStudents);
 
     // Tous les champs sont obligatoires
     if (!this.nomDevoir) { return; }
-    if (!this.dateDeRendu) { return; }
+    if (!this.dateLimite) { return; }
     if (!this.selectedSubject) { return; }
     if (!this.selectedTeacher) { return; }
 
@@ -63,7 +63,7 @@ export class AddAssignmentComponent implements OnInit {
       newAssignment.enseignant = this.selectedTeacher;
       newAssignment.eleve = student;
       newAssignment.rendu = false;
-      newAssignment.dateDeRendu = new Date(this.dateDeRendu);
+      newAssignment.dateLimite = new Date(this.dateLimite);
 
       // this.assignments.push(nouvelAssignment);
       // on ne peut accéder au tableau des assignments qui est dans le
