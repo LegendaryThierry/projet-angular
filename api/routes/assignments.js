@@ -3,8 +3,9 @@ let Assignment = require('../model/assignment');
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
     Assignment.find()
-        .populate("eleve") //Nom de la clé que l'on veut populer
         .populate("matiere")
+        .populate("enseignant")
+        .populate("eleve") //Nom de la clé que l'on veut populer
         .exec()
         .then(function(subjects){
             res.json(subjects);
@@ -29,7 +30,10 @@ function postAssignment(req, res){
     let assignment = new Assignment();
     assignment.id = req.body.id;
     assignment.nom = req.body.nom;
-    assignment.dateDeRendu = req.body.dateDeRendu;
+    assignment.matiere = req.body.matiere._id;
+    assignment.enseignant = req.body.enseignant._id;
+    assignment.eleve = req.body.eleve._id;
+    assignment.dateLimite = req.body.dateLimite;
     assignment.rendu = req.body.rendu;
 
     assignment.save( (err) => {

@@ -3,17 +3,23 @@ let Schema = mongoose.Schema;
 
 let AssignmentSchema = Schema({
     id: Number,
+    dateLimite: Date,
     dateDeRendu: Date,
     nom: String,
     rendu: Boolean,
-    eleve: {
+    matiere: {
+        type: Schema.Types.ObjectId,
+        ref: "Subject",
+        required: true
+    },
+    enseignant: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-    matiere: {
+    eleve: {
         type: Schema.Types.ObjectId,
-        ref: "Subject",
+        ref: "User",
         required: true
     },
     note: String,

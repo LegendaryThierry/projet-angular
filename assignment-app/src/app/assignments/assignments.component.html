@@ -1,34 +1,13 @@
 <div class="container">
   <div class="ajouterBtn">
     <a routerLink="/add">
-      <button mat-flat-button color="accent">
-        Ajouter Assignment
+      <button mat-flat-button color="success">
+          <mat-icon aria-hidden="false" aria-label="Add Icon">add</mat-icon>Ajouter Assignment
       </button>
     </a>
   </div>
 
-  <mat-list *ngFor="let a of assignments">
-    <div>
-      <a routerLink="/assignment/{{a.id}}">
-        <h3 mat-subheader>{{a.dateDeRendu | date}}</h3>
-
-        <mat-list-item>
-          <p *ngIf="a.rendu; else nonsoumis" appRendu>
-            {{a.nom}}, rendu : {{a.rendu}}
-          </p>
-
-          <ng-template #nonsoumis>
-            <p>{{a.nom}} NON RENDU !</p>
-          </ng-template>
-
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </a>
-    </div>
-  </mat-list>
-
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
     <ng-container matColumnDef="subjectTitle">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Matière </th>
       <td mat-cell *matCellDef="let element"> {{element.subjectTitle}} </td>
@@ -39,18 +18,39 @@
       <td mat-cell *matCellDef="let element"> {{element.assignmentTitle}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="teacher">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Enseignant </th>
+      <td mat-cell *matCellDef="let element"> {{element.teacher.first_name + " " + element.teacher.last_name}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="student">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Elève </th>
+      <td mat-cell *matCellDef="let element"> {{element.student.first_name + " " + element.student.last_name}} </td>
+    </ng-container>
+
     <ng-container matColumnDef="rendu">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Rendu ? </th>
-      <td mat-cell *matCellDef="let element"> {{element.rendu}} </td>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon *ngIf="element.rendu == true" aria-hidden="false" aria-label="Check Icon">check</mat-icon>
+        <mat-icon *ngIf="element.rendu == false" aria-hidden="false" aria-label="Close Icon">close</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateLimite">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date limite </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateLimite | date: "dd/MM/YYYY HH:mm"}} </td>
     </ng-container>
 
     <ng-container matColumnDef="dateDeRendu">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Date de rendu </th>
-      <td mat-cell *matCellDef="let element"> {{element.dateDeRendu}} </td>
+      <td mat-cell *matCellDef="let element" [ngClass]="(element.dateDeRendu <= element.dateLimite)?'greenText':'redText'">
+        {{element.dateDeRendu | date: "dd/MM/YYYY HH:mm"}}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="note">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Note </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Note/20</th>
       <td mat-cell *matCellDef="let element"> {{element.note}} </td>
     </ng-container>
 
@@ -60,7 +60,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getRecord(row)"></tr>
   </table>
 
 </div>

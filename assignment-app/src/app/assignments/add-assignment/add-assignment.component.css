@@ -1,10 +1,22 @@
 .form {
-  display: flex;
-  flex-direction: column;
   margin:5px;
+  background-color: #cfd8dc;
+  padding: 10px;
 }
 
 .container {
   display: flex;
   flex-direction: column;
+}
+
+.imageContainer{
+  max-height: 200px;
+  max-width: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.selectContainer{
+  background-color: #ffffff;
 }

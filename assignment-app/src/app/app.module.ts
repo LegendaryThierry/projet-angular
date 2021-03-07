@@ -50,7 +50,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
 
 import { AssignmentsComponent } from './assignments/assignments.component';
 import { RenduDirective } from './shared/rendu.directive';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AssignmentDetailComponent } from './assignments/assignment-detail/assignment-detail.component';
 import { AddAssignmentComponent } from './assignments/add-assignment/add-assignment.component';
 import {Routes, RouterModule} from '@angular/router';
@@ -132,6 +132,7 @@ const routes: Routes = [
     OverlayModule,
     PortalModule,
     ScrollingModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

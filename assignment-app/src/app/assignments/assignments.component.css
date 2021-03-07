@@ -23,3 +23,25 @@
 .ajouterBtn {
   align-self: flex-end;
  }
+
+.mat-row:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+button{
+  margin: 10px;
+}
+
+.mat-cell.greenText {
+  color: #43a047;
+}
+
+.mat-cell.redText{
+  color: #e53935;
+}

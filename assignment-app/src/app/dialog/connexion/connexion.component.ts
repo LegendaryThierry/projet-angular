@@ -35,7 +35,6 @@ export class ConnexionComponent implements OnInit {
     this.usersService.findUser(this.username, this.password).subscribe(user => {
       if (user != null){
         this.dialogRef.close(user);
-        this.router.navigate(['/home']); // On redirige l'utilisateur si la connexion a réussi
       }
       else{
         this.closeDialog();

@@ -11,7 +11,7 @@ function getUsers(req, res){
     });
 }
 
-// Récupérer un users avec son username et password (POST)
+// Récupérer un user avec son username et password (POST)
 function findUser(req, res){
     let username = req.body.username;
     let password = req.body.password;

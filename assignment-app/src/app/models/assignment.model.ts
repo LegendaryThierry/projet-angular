@@ -5,10 +5,12 @@ export class Assignment {
   _id?: string;
   id: number;
   nom: string;
+  dateLimite: Date;
   dateDeRendu: Date;
   rendu?: boolean;
-  eleve: User;
   matiere: Subject;
+  enseignant: User;
+  eleve: User;
   note: number;
   remarque: string;
 }

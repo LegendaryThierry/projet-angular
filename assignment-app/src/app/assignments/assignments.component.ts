@@ -3,11 +3,17 @@ import { AssignmentsService } from '../shared/assignments.service';
 import { Assignment } from '../models/assignment.model';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
+import {Router} from '@angular/router';
+import {User} from '../models/users.model';
 
 export interface TableRow {
+  id: number;
   subjectTitle: string;
   assignmentTitle: string;
+  student: User;
+  teacher: User;
   rendu: boolean;
+  dateLimite: Date;
   dateDeRendu: Date;
   note: number;
   remarque: string;
@@ -22,13 +28,13 @@ export interface TableRow {
 export class AssignmentsComponent implements OnInit, AfterViewInit{
   assignments: Assignment[];
 
-  displayedColumns: string[] = ['subjectTitle', 'assignmentTitle', 'rendu', 'dateDeRendu', 'note', 'remarque'];
+  displayedColumns: string[] = ['subjectTitle', 'assignmentTitle', 'teacher', 'student', 'rendu', 'dateLimite', 'dateDeRendu', 'note', 'remarque'];
   dataSource: MatTableDataSource<TableRow>;
   ELEMENT_DATA: TableRow[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private assignmentsService: AssignmentsService) {}
+  constructor(private assignmentsService: AssignmentsService, private router: Router) {}
 
   ngOnInit(): void {
 
@@ -37,16 +43,22 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
         // appelé que quand les données sont prêtes
         this.assignments = assignments;
 
-        this.assignments.forEach(assignment => this.ELEMENT_DATA.push(
-          {
-            subjectTitle: assignment.matiere.title,
-            assignmentTitle: assignment.nom,
-            dateDeRendu: assignment.dateDeRendu,
-            note: assignment.note,
-            remarque: assignment.remarque,
-            rendu: assignment.rendu
-          }
-        ));
+        this.assignments.forEach(assignment => {
+            this.ELEMENT_DATA.push(
+              {
+                id: assignment.id,
+                subjectTitle: assignment.matiere.title,
+                assignmentTitle: assignment.nom,
+                teacher: assignment.enseignant,
+                student: assignment.eleve,
+                rendu: assignment.rendu,
+                dateLimite: assignment.dateLimite,
+                dateDeRendu: assignment.dateDeRendu,
+                note: assignment.note,
+                remarque: assignment.remarque
+              }
+            );
+        });
 
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
         console.log(assignments);
@@ -63,6 +75,10 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
+  }
+
+  getRecord(row): void{
+    this.router.navigate(['/assignment/' + row.id]);
   }
 }
