@@ -11,30 +11,30 @@ import { Assignment } from '../../models/assignment.model';
 export class EditAssigmentComponent implements OnInit {
   assignment: Assignment;
   // pour les champs du formulaire
-  nomAssignment:string;
+  nomAssignment: string;
   dateDeRendu: Date;
 
-  constructor(private route:ActivatedRoute, private router:Router,
-    private assignmentsService:AssignmentsService) { }
+  constructor(private route: ActivatedRoute, private router: Router,
+              private assignmentsService: AssignmentsService) { }
 
   ngOnInit(): void {
-    let nomPasseDansURL = this.route.snapshot.queryParams.nom;
-    let fragmentPasseDansURL = this.route.snapshot.fragment;
-    console.log("param nom = " + nomPasseDansURL);
-    console.log("fragment = " + fragmentPasseDansURL);
+    const nomPasseDansURL = this.route.snapshot.queryParams.nom;
+    const fragmentPasseDansURL = this.route.snapshot.fragment;
+    console.log('param nom = ' + nomPasseDansURL);
+    console.log('fragment = ' + fragmentPasseDansURL);
 
     this.getAssignment();
   }
 
-  getAssignment() {
+  getAssignment(): void {
      // on va récupérer l'id dans la route comme pour le composant d'ajout
     // ne pas oublier le "+" pour le transformer en number (sinon c'est une chaine de caractères)
-    let id = +this.route.snapshot.params.id;
-    console.log("EDIT id = " + id);
+    const id = +this.route.snapshot.params.id;
+    console.log('EDIT id = ' + id);
 
     this.assignmentsService.getAssignment(id)
     .subscribe(a => {
-      if(a) {
+      if (a) {
         this.assignment = a;
         this.nomAssignment = a.nom;
         this.dateDeRendu = a.dateDeRendu;
@@ -42,10 +42,10 @@ export class EditAssigmentComponent implements OnInit {
 
     });
   }
-  onSaveAssignment() {
+  onSaveAssignment(): void {
     // On va modifier l'assignment....
-    if(! this.nomAssignment) return;
-    if(! this.dateDeRendu) return;
+    if (! this.nomAssignment) { return; }
+    if (! this.dateDeRendu) { return; }
 
     this.assignment.nom = this.nomAssignment;
     this.assignment.dateDeRendu = this.dateDeRendu;
@@ -55,8 +55,8 @@ export class EditAssigmentComponent implements OnInit {
       console.log(reponse.message);
 
       // et on navigue vers la liste
-      this.router.navigate(["/home"]);
-    })
+      this.router.navigate(['/home']);
+    });
   }
 
 }

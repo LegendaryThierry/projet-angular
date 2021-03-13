@@ -19,6 +19,8 @@ export interface TableRow {
   remarque: string;
 }
 
+// TODO: Filtrer tous les assignments récupérés pour créer une liste regroupant les assignments en fonction de leurs nom, matière et professeur
+
 @Component({ // Indique que la classe définie en dessous est un component
   selector: 'app-assignments',
   templateUrl: './assignments.component.html',

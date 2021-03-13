@@ -14,7 +14,7 @@ export class ConnexionComponent implements OnInit {
   username = '';
   password = '';
 
-  constructor(private dialogRef: MatDialogRef<ConnexionComponent>, private usersService: UsersService, private router: Router) { }
+  constructor(private dialogRef: MatDialogRef<ConnexionComponent>, private usersService: UsersService) { }
 
   ngOnInit(): void {}
 

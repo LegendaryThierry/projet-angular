@@ -1,21 +1,26 @@
-<div app-theme>
+<div app-theme class="my-2 shadow-lg">
   <div class="innerdiv">
-<mat-card *ngIf="assignmentTransmis" class="container">
-  <mat-card-title>
-    {{assignmentTransmis.nom}}
-  </mat-card-title>
-  <mat-card-subtitle>
-    {{assignmentTransmis.dateDeRendu | date}}
-  </mat-card-subtitle>
-  <mat-checkbox *ngIf="!assignmentTransmis.rendu" (click)="onAssignmentRendu()">
-    Assignment rendu
-  </mat-checkbox>
+    <mat-card *ngIf="assignmentTransmis" class="container">
+      <mat-card-title>
+        {{assignmentTransmis.nom}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{"Elève: " + assignmentTransmis.eleve.first_name + " " + assignmentTransmis.eleve.last_name}}
+      </mat-card-subtitle>
+      <!--<mat-checkbox *ngIf="!assignmentTransmis.rendu" (click)="onAssignmentRendu()">
+        Assignment rendu
+      </mat-checkbox>-->
 
-      <button mat-stroked-button color="primary" (click)="onEdit()">EDIT</button>
+      <!--<div>
+        <label>Note/20 :</label>
+        <input class="mx-2" matInput type="number" min="0" max="20" [(ngModel)]="grade">
+      </div>-->
 
-
-
-  <button mat-flat-button color="accent" (click)="onDelete()">DELETE</button>
-</mat-card>
+      <div>
+        <button class="btn btn-primary" color="primary" (click)="openGradeDialog()">NOTER</button>
+        <button class="mx-2 btn btn-secondary" (click)="onEdit()">EDIT</button>
+        <button class="btn btn-danger" (click)="onDelete()">DELETE</button>
+      </div>
+    </mat-card>
     </div>
-    </div>
+</div>

@@ -1,0 +1,40 @@
+<div app-theme>
+  <div>
+    <form ngForm #gradeForm class="form">
+      <h2 mat-dialog-title>Noter le devoir</h2>
+      <mat-dialog-content>
+        <div>
+          <mat-form-field>
+            <mat-label>Note/20 :</mat-label>
+            <input required matInput class="mx-2" type="number" min="0" max="20" [(ngModel)]="grade" name="grade">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <mat-label>Commentaire sur le devoir</mat-label>
+            <textarea
+              [(ngModel)]="comment"
+              name="comment"
+              required
+              matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="5">
+            </textarea>
+          </mat-form-field>
+        </div>
+      </mat-dialog-content>
+
+      <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="onSubmit($event); gradeForm.reset();">
+          Noter
+        </button>
+        <button mat-raised-button (click)="closeDialog()" color="warn">
+          Fermer
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

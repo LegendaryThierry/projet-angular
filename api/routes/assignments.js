@@ -19,10 +19,16 @@ function getAssignments(req, res){
 function getAssignment(req, res){
     let assignmentId = req.params.id;
 
-    Assignment.findOne({id: assignmentId}, (err, assignment) =>{
-        if(err){res.send(err)}
-        res.json(assignment);
-    })
+    Assignment.findOne({id: assignmentId})
+        .populate("matiere")
+        .populate("enseignant")
+        .populate("eleve") //Nom de la clé que l'on veut populer
+        .then(function (subject){
+            res.json(subject);
+        })
+        .catch(function (err){
+            res.json(err);
+        });
 }
 
 // Ajout d'un assignment (POST)

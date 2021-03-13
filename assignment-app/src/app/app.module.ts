@@ -30,7 +30,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
+import {MAT_DATE_LOCALE, MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -59,9 +59,10 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { ConnexionComponent } from './dialog/connexion/connexion.component';
 import { MainComponent } from './main/main.component';
-import {lightTheme} from "./theme/light-theme";
-import {ThemeModule} from "./theme/theme.module";
-import {darkTheme} from "./theme/dark-theme";
+import {lightTheme} from './theme/light-theme';
+import {ThemeModule} from './theme/theme.module';
+import {darkTheme} from './theme/dark-theme';
+import { GradeComponent } from './dialog/grade/grade.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
@@ -74,7 +75,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [AppComponent, AssignmentsComponent, RenduDirective, AssignmentDetailComponent,
-    AddAssignmentComponent, EditAssigmentComponent, ConnexionComponent, MainComponent],
+    AddAssignmentComponent, EditAssigmentComponent, ConnexionComponent, MainComponent, GradeComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -142,7 +143,9 @@ const routes: Routes = [
       active: 'light'
     })
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'},
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
