@@ -6,7 +6,14 @@ import {MatSort} from '@angular/material/sort';
 import {Router} from '@angular/router';
 import {User} from '../models/users.model';
 
-export interface TableRow {
+export interface AssignmentRow{
+  subjectTitle: string;
+  assignmentTitle: string;
+  teacher: User;
+  dateLimite: Date;
+}
+
+export interface StudentRow {
   id: number;
   subjectTitle: string;
   assignmentTitle: string;
@@ -19,8 +26,6 @@ export interface TableRow {
   remarque: string;
 }
 
-// TODO: Filtrer tous les assignments récupérés pour créer une liste regroupant les assignments en fonction de leurs nom, matière et professeur
-
 @Component({ // Indique que la classe définie en dessous est un component
   selector: 'app-assignments',
   templateUrl: './assignments.component.html',
@@ -28,11 +33,14 @@ export interface TableRow {
 })
 
 export class AssignmentsComponent implements OnInit, AfterViewInit{
-  assignments: Assignment[];
+  studentAssignments: Assignment[];
 
+  displayedColumnsAssignments: string[] = ['subjectTitle', 'assignmentTitle', 'teacher', 'dateLimite', 'edit', 'delete'];
   displayedColumns: string[] = ['subjectTitle', 'assignmentTitle', 'teacher', 'student', 'rendu', 'dateLimite', 'dateDeRendu', 'note', 'remarque'];
-  dataSource: MatTableDataSource<TableRow>;
-  ELEMENT_DATA: TableRow[] = [];
+  dataSourceStudent: MatTableDataSource<StudentRow>;
+  dataSourceAssignment: MatTableDataSource<AssignmentRow>;
+  ELEMENT_DATA_STUDENT: StudentRow[] = [];
+  ELEMENT_DATA_ASSIGNMENT: AssignmentRow[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -40,13 +48,31 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
 
   ngOnInit(): void {
 
+    // Tableau des devoirs
+    this.assignmentsService.getDistinctAssignments().subscribe((assignments: Assignment[]) => {
+      assignments.forEach(assignment => {
+          this.ELEMENT_DATA_ASSIGNMENT.push(
+            {
+              subjectTitle: assignment.matiere.title,
+              assignmentTitle: assignment.nom,
+              teacher: assignment.enseignant,
+              dateLimite: assignment.dateLimite
+            }
+          );
+        }
+      );
+
+      this.dataSourceAssignment = new MatTableDataSource(this.ELEMENT_DATA_ASSIGNMENT);
+    });
+
+    // Tableau des devoirs des étudiants
     this.assignmentsService.getAssignments()
       .subscribe((assignments: Assignment[]) => {
         // appelé que quand les données sont prêtes
-        this.assignments = assignments;
+        this.studentAssignments = assignments;
 
-        this.assignments.forEach(assignment => {
-            this.ELEMENT_DATA.push(
+        this.studentAssignments.forEach(assignment => {
+            this.ELEMENT_DATA_STUDENT.push(
               {
                 id: assignment.id,
                 subjectTitle: assignment.matiere.title,
@@ -62,9 +88,8 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
             );
         });
 
-        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-        console.log(assignments);
-        console.log(this.ELEMENT_DATA);
+        this.dataSourceStudent = new MatTableDataSource(this.ELEMENT_DATA_STUDENT);
+        console.log(this.ELEMENT_DATA_STUDENT);
       });
 
     /* peu utilisé par les devs angular

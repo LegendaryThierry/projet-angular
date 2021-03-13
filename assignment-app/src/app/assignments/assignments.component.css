@@ -45,3 +45,7 @@ button{
 .mat-cell.redText{
   color: #e53935;
 }
+
+.mat-icon {
+  font-size: 20px;
+}

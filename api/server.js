@@ -51,6 +51,9 @@ app.route(prefix + '/assignments')
   .post(assignment.postAssignment)
   .put(assignment.updateAssignment);
 
+app.route(prefix + '/assignments/distinct')
+    .get(assignment.getDistinctAssignments)
+
 app.route(prefix + '/assignments/:id')
   .get(assignment.getAssignment)
   .delete(assignment.deleteAssignment);

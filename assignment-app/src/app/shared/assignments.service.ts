@@ -49,6 +49,14 @@ export class AssignmentsService {
     );
   }
 
+  getDistinctAssignments(): Observable<Assignment[]> {
+    // return of(this.assignments);
+    return this.http.get<Assignment[]>(this.url + '/distinct')
+      .pipe(
+        catchError(this.handleError<Assignment[]>('getDistinctAssignments()'))
+      );
+  }
+
   // version avec promesse. Peu utilisé par les devs angular
   getAssignmentsPromise(): Promise<Assignment[]> {
     // return of(this.assignments);

@@ -1,4 +1,5 @@
 let Assignment = require('../model/assignment');
+const mongoose = require('mongoose');
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
@@ -60,7 +61,6 @@ function updateAssignment(req, res) {
         res.json({message: `updated`})
       // console.log('updated ', assignment)
     });
-
 }
 
 // suppression d'un assignment (DELETE)
@@ -74,6 +74,35 @@ function deleteAssignment(req, res) {
     })
 }
 
+function getDistinctAssignments(req, res){
+    let resultArray = [];
+
+    Assignment.aggregate(
+        [
+            {
+                "$group": {
+                    "_id": {"nom": "$nom", "enseignant": "$enseignant", "matiere": "$matiere", "dateLimite": "$dateLimite"}
+                }
+            }
+        ]
+    ).then(function (result){
+        result.forEach(function (data){
+            let x = new Assignment()
+            x.nom = data._id.nom
+            x.enseignant = data._id.enseignant
+            x.matiere = data._id.matiere
+            x.dateLimite = data._id.dateLimite
+            resultArray.push(x)
+        });
+
+        Assignment.populate(resultArray, {path: "enseignant"}).then(function (result){
+            Assignment.populate(result, {path: "matiere"}).then(function (result){
+                res.json(result)
+            });
+        });
+    });
+}
 
 
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };
+
+module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment, getDistinctAssignments};
