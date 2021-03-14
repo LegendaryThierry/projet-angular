@@ -1,0 +1,20 @@
+<div app-theme>
+  <div>
+    <form ngForm #confirmationForm class="form">
+      <h2 mat-dialog-title>Confirmer l'action ?</h2>
+      <mat-dialog-content>
+        <p>{{this.data.question}}</p>
+      </mat-dialog-content>
+
+      <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="onSubmit($event); confirmationForm.reset();">
+          Valider
+        </button>
+        <button mat-raised-button (click)="closeDialog()" color="warn">
+          Annuler
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>
+

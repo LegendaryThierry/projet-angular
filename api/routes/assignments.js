@@ -1,12 +1,13 @@
 let Assignment = require('../model/assignment');
-const mongoose = require('mongoose');
+let StudentAssignment = require('../model/studentAssignment');
+const mongoose = require("mongoose");
+
 
 // Récupérer tous les assignments (GET)
 function getAssignments(req, res){
     Assignment.find()
         .populate("matiere")
         .populate("enseignant")
-        .populate("eleve") //Nom de la clé que l'on veut populer
         .exec()
         .then(function(subjects){
             res.json(subjects);
@@ -20,7 +21,7 @@ function getAssignments(req, res){
 function getAssignment(req, res){
     let assignmentId = req.params.id;
 
-    Assignment.findOne({id: assignmentId})
+    Assignment.findOne({_id: assignmentId})
         .populate("matiere")
         .populate("enseignant")
         .populate("eleve") //Nom de la clé que l'on veut populer
@@ -34,27 +35,45 @@ function getAssignment(req, res){
 
 // Ajout d'un assignment (POST)
 function postAssignment(req, res){
+    let assignmentID = mongoose.Types.ObjectId();
     let assignment = new Assignment();
-    assignment.id = req.body.id;
-    assignment.nom = req.body.nom;
-    assignment.matiere = req.body.matiere._id;
-    assignment.enseignant = req.body.enseignant._id;
-    assignment.eleve = req.body.eleve._id;
-    assignment.dateLimite = req.body.dateLimite;
-    assignment.rendu = req.body.rendu;
+    assignment._id = assignmentID;
+    assignment.nom = req.body.assignment.nom;
+    assignment.matiere = req.body.assignment.matiere._id;
+    assignment.enseignant = req.body.assignment.enseignant._id;
+    assignment.dateLimite = req.body.assignment.dateLimite;
 
     assignment.save( (err) => {
         if(err){
             res.send('cant post assignment ', err);
         }
+
+        req.body.students.forEach(studentAssignmentData => {
+            console.log(studentAssignmentData);
+            let studentAssignment = new StudentAssignment();
+            studentAssignment._id = mongoose.Types.ObjectId();
+            studentAssignment.assignment = assignmentID;
+            studentAssignment.dateDeRendu = null;
+            studentAssignment.rendu = false;
+            studentAssignment.eleve = studentAssignmentData._id;
+            studentAssignment.note = null;
+            studentAssignment.remarque = '';
+
+            studentAssignment.save((err) => {
+                if (err) {
+                    res.send('cant post assignment ', err);
+                }
+            });
+        });
+
         res.json({ message: `${assignment.nom} saved!`})
     })
 }
 
 // Update d'un assignment (PUT)
 function updateAssignment(req, res) {
-
     Assignment.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, assignment) => {
+        console.log(assignment)
         if (err) {
             res.send(err)
         }
@@ -65,12 +84,17 @@ function updateAssignment(req, res) {
 
 // suppression d'un assignment (DELETE)
 function deleteAssignment(req, res) {
-
     Assignment.findByIdAndRemove(req.params.id, (err, assignment) => {
         if (err) {
             res.send(err);
         }
-        res.json({message: `${assignment.nom} deleted`});
+
+        StudentAssignment.deleteMany({assignment: req.params.id}, (err, studentAssignment) => {
+            if (err) {
+                res.send(err);
+            }
+            res.json({message: `Successfully deleted !`})
+        })
     })
 }
 

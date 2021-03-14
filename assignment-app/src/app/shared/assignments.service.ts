@@ -100,22 +100,19 @@ export class AssignmentsService {
     };
   }
 
-  addAssignment(assignment: Assignment): Observable<any> {
-    this.logginService.log(assignment.nom, 'a été ajouté....');
+  addAssignment(data: object): Observable<any> {
+    return this.http.post<object>(this.url, data);
+  }
 
-    assignment.id = this.getNewId();
+  /*addAssignment(assignment: Assignment): Observable<any> {
+    this.logginService.log(assignment.nom, 'a été ajouté....');
 
     // this.assignments.push(assignment);
 
     return this.http.post<Assignment>(this.url, assignment);
-  }
+  }*/
 
-  updateAssignment(assignment: Assignment): Observable<any> {
-    this.logginService.log(assignment.nom, 'a été modifié....');
-
-    // par la suite on rajoutera du code pour modifier
-    // dans une base de données distante.
-    // return of("AssignmentService : Assignment modifié !");
+  updateAssignment(assignment: object): Observable<any> {
     return this.http.put(this.url, assignment);
   }
 

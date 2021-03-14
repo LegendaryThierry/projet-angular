@@ -5,16 +5,22 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {Router} from '@angular/router';
 import {User} from '../models/users.model';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {EditAssignmentComponent} from '../dialog/edit-assignment/edit-assignment.component';
+import {StudentAssignmentsService} from '../shared/studentAssignments';
+import {StudentAssignment} from '../models/studentAssignment';
+import {ConfirmationComponent} from '../dialog/confirmation/confirmation.component';
 
 export interface AssignmentRow{
+  _id: string;
   subjectTitle: string;
   assignmentTitle: string;
   teacher: User;
   dateLimite: Date;
 }
 
-export interface StudentRow {
-  id: number;
+export interface StudentAssignmentRow {
+  id: string;
   subjectTitle: string;
   assignmentTitle: string;
   student: User;
@@ -33,26 +39,32 @@ export interface StudentRow {
 })
 
 export class AssignmentsComponent implements OnInit, AfterViewInit{
-  studentAssignments: Assignment[];
-
   displayedColumnsAssignments: string[] = ['subjectTitle', 'assignmentTitle', 'teacher', 'dateLimite', 'edit', 'delete'];
   displayedColumns: string[] = ['subjectTitle', 'assignmentTitle', 'teacher', 'student', 'rendu', 'dateLimite', 'dateDeRendu', 'note', 'remarque'];
-  dataSourceStudent: MatTableDataSource<StudentRow>;
+  dataSourceNotSubmited: MatTableDataSource<StudentAssignmentRow>;
+  dataSourceSubmited: MatTableDataSource<StudentAssignmentRow>;
   dataSourceAssignment: MatTableDataSource<AssignmentRow>;
-  ELEMENT_DATA_STUDENT: StudentRow[] = [];
+  assignments: Assignment[];
+  ELEMENT_DATA_SUBMITED: StudentAssignmentRow[] = [];
+  ELEMENT_DATA_NOT_SUBMITED: StudentAssignmentRow[] = [];
   ELEMENT_DATA_ASSIGNMENT: AssignmentRow[] = [];
+  editAssignmentDialogRef: MatDialogRef<EditAssignmentComponent>;
+  deleteAssignmentDialogRef: MatDialogRef<ConfirmationComponent>;
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private assignmentsService: AssignmentsService, private router: Router) {}
+  constructor(private dialog: MatDialog, private assignmentsService: AssignmentsService,
+              private studentAssignmentsService: StudentAssignmentsService, private router: Router) {}
 
   ngOnInit(): void {
 
     // Tableau des devoirs
-    this.assignmentsService.getDistinctAssignments().subscribe((assignments: Assignment[]) => {
+    this.assignmentsService.getAssignments().subscribe((assignments: Assignment[]) => {
+      this.assignments = assignments;
       assignments.forEach(assignment => {
           this.ELEMENT_DATA_ASSIGNMENT.push(
             {
+              _id: assignment._id,
               subjectTitle: assignment.matiere.title,
               assignmentTitle: assignment.nom,
               teacher: assignment.enseignant,
@@ -66,30 +78,47 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     });
 
     // Tableau des devoirs des étudiants
-    this.assignmentsService.getAssignments()
-      .subscribe((assignments: Assignment[]) => {
-        // appelé que quand les données sont prêtes
-        this.studentAssignments = assignments;
+    this.studentAssignmentsService.getStudentAssignments()
+      .subscribe((studentAssignments: StudentAssignment[]) => {
 
-        this.studentAssignments.forEach(assignment => {
-            this.ELEMENT_DATA_STUDENT.push(
-              {
-                id: assignment.id,
-                subjectTitle: assignment.matiere.title,
-                assignmentTitle: assignment.nom,
-                teacher: assignment.enseignant,
-                student: assignment.eleve,
-                rendu: assignment.rendu,
-                dateLimite: assignment.dateLimite,
-                dateDeRendu: assignment.dateDeRendu,
-                note: assignment.note,
-                remarque: assignment.remarque
-              }
-            );
+        // appelé que quand les données sont prêtes
+        studentAssignments.forEach(studentAssignment => {
+            if (studentAssignment.rendu === true){
+              this.ELEMENT_DATA_SUBMITED.push(
+                {
+                  id: studentAssignment._id,
+                  subjectTitle: studentAssignment.assignment.matiere.title,
+                  assignmentTitle: studentAssignment.assignment.nom,
+                  teacher: studentAssignment.assignment.enseignant,
+                  student: studentAssignment.eleve,
+                  rendu: studentAssignment.rendu,
+                  dateLimite: studentAssignment.assignment.dateLimite,
+                  dateDeRendu: studentAssignment.dateDeRendu,
+                  note: studentAssignment.note,
+                  remarque: studentAssignment.remarque
+                }
+              );
+            }
+            else{
+              this.ELEMENT_DATA_NOT_SUBMITED.push(
+                {
+                  id: studentAssignment._id,
+                  subjectTitle: studentAssignment.assignment.matiere.title,
+                  assignmentTitle: studentAssignment.assignment.nom,
+                  teacher: studentAssignment.assignment.enseignant,
+                  student: studentAssignment.eleve,
+                  rendu: studentAssignment.rendu,
+                  dateLimite: studentAssignment.assignment.dateLimite,
+                  dateDeRendu: studentAssignment.dateDeRendu,
+                  note: studentAssignment.note,
+                  remarque: studentAssignment.remarque
+                }
+              );
+            }
         });
 
-        this.dataSourceStudent = new MatTableDataSource(this.ELEMENT_DATA_STUDENT);
-        console.log(this.ELEMENT_DATA_STUDENT);
+        this.dataSourceNotSubmited = new MatTableDataSource(this.ELEMENT_DATA_NOT_SUBMITED);
+        this.dataSourceSubmited = new MatTableDataSource(this.ELEMENT_DATA_SUBMITED);
       });
 
     /* peu utilisé par les devs angular
@@ -105,7 +134,58 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     // this.dataSource.sort = this.sort;
   }
 
-  getRecord(row): void{
+  openEditAssignmentDialog(row): void{
+    this.editAssignmentDialogRef = this.dialog.open(EditAssignmentComponent, {
+      data:
+        {
+          assignmentTitle: row.assignmentTitle,
+          dateLimite: row.dateLimite
+        },
+    });
+
+    this.editAssignmentDialogRef.afterClosed().subscribe(data => {
+      if (data !== null){
+        const editedAssignment = this.assignments.filter(assignment => assignment._id === row._id)[0];
+        editedAssignment.nom = data.assignmentTitle;
+        editedAssignment.dateLimite = data.dateLimite;
+
+        console.log(editedAssignment);
+
+        const dataToSend = {
+          _id: editedAssignment._id,
+          nom: data.assignmentTitle,
+          dateLimite: data.dateLimite,
+          matiere: editedAssignment.matiere._id,
+          enseignant: editedAssignment.enseignant._id
+        };
+
+        this.assignmentsService.updateAssignment(dataToSend).subscribe( result => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
+  openDeleteAssignmentDialog(row): void{
+    this.deleteAssignmentDialogRef = this.dialog.open(ConfirmationComponent, {
+      data:
+        {
+          question: 'Voulez-vous supprimez ce composant ?'
+        },
+    });
+
+    this.deleteAssignmentDialogRef.afterClosed().subscribe(data => {
+      if (data === true){
+        const assignmentToDelete = this.assignments.filter(assignment => assignment._id === row._id)[0];
+        this.assignmentsService.deleteAssignment(assignmentToDelete).subscribe(result => {
+            window.location.reload();
+          }
+        );
+      }
+    });
+  }
+
+  editStudentAssignment(row): void{
     this.router.navigate(['/assignment/' + row.id]);
   }
 }

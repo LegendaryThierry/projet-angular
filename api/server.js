@@ -2,6 +2,7 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
+let studentAssignment = require('./routes/studentAssignments')
 const user = require('./routes/users');
 const subject = require('./routes/subjects');
 
@@ -47,9 +48,18 @@ const prefix = '/api';
 
 // ----- ASSIGNMENTS ROUTES -----
 app.route(prefix + '/assignments')
-  .get(assignment.getAssignments)
-  .post(assignment.postAssignment)
-  .put(assignment.updateAssignment);
+    .get(assignment.getAssignments)
+    .post(assignment.postAssignment)
+    .put(assignment.updateAssignment);
+
+app.route(prefix + '/student-assignments')
+    .get(studentAssignment.getStudentAssignments)
+    .post(studentAssignment.postStudentAssignment)
+    .put(studentAssignment.updateStudentAssignment);
+
+app.route(prefix + '/student-assignments/:id')
+    .get(studentAssignment.getStudentAssignment)
+    .delete(studentAssignment.deleteStudentAssignment);
 
 app.route(prefix + '/assignments/distinct')
     .get(assignment.getDistinctAssignments)

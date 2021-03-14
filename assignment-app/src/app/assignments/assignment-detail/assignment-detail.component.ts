@@ -4,6 +4,9 @@ import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../../models/assignment.model';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {GradeComponent} from '../../dialog/grade/grade.component';
+import {StudentAssignment} from '../../models/studentAssignment';
+import {StudentAssignmentsService} from '../../shared/studentAssignments';
+import {ConfirmationComponent} from '../../dialog/confirmation/confirmation.component';
 
 @Component({
   selector: 'app-assignment-detail',
@@ -12,12 +15,13 @@ import {GradeComponent} from '../../dialog/grade/grade.component';
 })
 export class AssignmentDetailComponent implements OnInit {
   // ici c'est une propriété transmises par l'attribut "assignmentTransmis";
-  assignmentTransmis: Assignment;
+  assignmentTransmis: StudentAssignment;
   gradeDialogRef: MatDialogRef<GradeComponent>;
+  deleteDialogRef: MatDialogRef<ConfirmationComponent>;
 
   constructor(
-    private gradeDialog: MatDialog,
-    private assignmentsService: AssignmentsService,
+    private dialog: MatDialog,
+    private studentAssignmentsService: StudentAssignmentsService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -26,17 +30,16 @@ export class AssignmentDetailComponent implements OnInit {
     // on récupère l'id dans l'URL, attention par défaut c'est de type string
     // on va devoir le changer en number. Pour cela en typescript il suffit de
     // mettre un "+" devant
-    const id = +this.route.snapshot.params.id;
+    const id = this.route.snapshot.params.id;
 
     // On recupère l'assignment correspondant à l'id
-    this.assignmentsService.getAssignment(id)
+    this.studentAssignmentsService.getStudentAssignment(id)
     .subscribe(a => {
       this.assignmentTransmis = a;
-      console.log(this.assignmentTransmis);
     });
   }
 
-  onAssignmentRendu(): void {
+  /*onAssignmentRendu(): void {
     this.assignmentTransmis.rendu = true;
 
     this.assignmentsService.updateAssignment(this.assignmentTransmis)
@@ -45,15 +48,30 @@ export class AssignmentDetailComponent implements OnInit {
       // et on navigue vers la liste
       this.router.navigate(['/home']);
     });
-  }
+  }*/
 
   openGradeDialog(): void{
-    this.gradeDialogRef = this.gradeDialog.open(GradeComponent);
+    this.gradeDialogRef = this.dialog.open(GradeComponent);
 
     this.gradeDialogRef.afterClosed().subscribe(resultArray => {
       console.log(resultArray);
       if (resultArray !== null){
         this.giveGrade(resultArray[0], resultArray[1]);
+      }
+    });
+  }
+
+  openDeleteDialog(): void{
+    this.deleteDialogRef = this.dialog.open(ConfirmationComponent, {
+      data:
+        {
+          question: 'Voulez-vous supprimez le devoir de cet étudiant ?'
+        },
+    });
+
+    this.deleteDialogRef.afterClosed().subscribe(result => {
+      if (result === true){
+        this.onDelete();
       }
     });
   }
@@ -64,7 +82,7 @@ export class AssignmentDetailComponent implements OnInit {
     this.assignmentTransmis.dateDeRendu = new Date(Date.now());
     this.assignmentTransmis.remarque = comment;
 
-    this.assignmentsService.updateAssignment(this.assignmentTransmis)
+    this.studentAssignmentsService.updateStudentAssignment(this.assignmentTransmis)
       .subscribe(reponse => {
         console.log(reponse.message);
         // et on navigue vers la liste
@@ -76,9 +94,9 @@ export class AssignmentDetailComponent implements OnInit {
     // dans la version précédent ici on prévenait le père par un
     // événement etc. mais maintenant qu'on a un service, pas la peine !
     // on va utiliser directement le service :-)
-    this.assignmentsService.deleteAssignment(this.assignmentTransmis)
-    .subscribe(reponse => {
-      console.log(reponse.message);
+    this.studentAssignmentsService.deleteStudentAssignment(this.assignmentTransmis)
+    .subscribe(response => {
+      console.log(response.message);
       this.assignmentTransmis = null;
 
       // et on navigue vers la liste
@@ -88,9 +106,9 @@ export class AssignmentDetailComponent implements OnInit {
   }
 
   onEdit(): void {
-    this.router.navigate(['assignment', this.assignmentTransmis.id, 'edit'],
+    this.router.navigate(['assignment', this.assignmentTransmis._id, 'edit'],
     {
-      queryParams: {nom: this.assignmentTransmis.nom},
+      queryParams: {nom: this.assignmentTransmis._id},
       fragment: 'edition'
     });
   }

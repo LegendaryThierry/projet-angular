@@ -1,21 +1,23 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
-let AssignmentSchema = Schema({
+let StudentAssignmentSchema = Schema({
     _id: Schema.Types.ObjectId,
-    dateLimite: Date,
-    nom: String,
-    matiere: {
+    assignment: {
         type: Schema.Types.ObjectId,
-        ref: "Subject",
+        ref: "Assignment",
         required: true
     },
-    enseignant: {
+    dateDeRendu: Date,
+    rendu: Boolean,
+    eleve: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
+    },
+    note: String,
+    remarque: String
 });
 
 // C'est à travers ce modèle Mongoose qu'on pourra faire le CRUD
-module.exports = mongoose.model('Assignment', AssignmentSchema, 'assignments');
+module.exports = mongoose.model('StudentAssignment', StudentAssignmentSchema, 'studentAssignments');

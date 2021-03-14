@@ -6,6 +6,8 @@ import {UsersService} from '../../shared/users.service';
 import {User} from '../../models/users.model';
 import {SubjectsService} from '../../shared/subjects.service';
 import {Subject} from '../../models/subjects.model';
+import {StudentAssignmentsService} from '../../shared/studentAssignments';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-add-assignment',
@@ -23,9 +25,13 @@ export class AddAssignmentComponent implements OnInit {
   selectedSubject = null;
   selectedTeacher = null;
   selectedStudents = [];
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
-  constructor(private assignmentsService: AssignmentsService, private subjectsService: SubjectsService, private usersService: UsersService,
-              private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private assignmentsService: AssignmentsService,
+              private studentAssignmentsService: StudentAssignmentsService,
+              private subjectsService: SubjectsService,
+              private usersService: UsersService, private router: Router) {}
 
   ngOnInit(): void {
     // Récupération de toutes les matières
@@ -56,26 +62,21 @@ export class AddAssignmentComponent implements OnInit {
     if (!this.selectedSubject) { return; }
     if (!this.selectedTeacher) { return; }
 
-    this.selectedStudents.forEach(student => {
-      const newAssignment = new Assignment();
-      newAssignment.nom = this.nomDevoir;
-      newAssignment.matiere = this.selectedSubject;
-      newAssignment.enseignant = this.selectedTeacher;
-      newAssignment.eleve = student;
-      newAssignment.rendu = false;
-      newAssignment.dateLimite = new Date(this.dateLimite);
+    const newAssignment = new Assignment();
+    newAssignment.nom = this.nomDevoir;
+    newAssignment.matiere = this.selectedSubject;
+    newAssignment.enseignant = this.selectedTeacher;
+    newAssignment.dateLimite = new Date(this.dateLimite);
 
-      // this.assignments.push(nouvelAssignment);
-      // on ne peut accéder au tableau des assignments qui est dans le
-      // composant père.... on va devoir trouver un moyen de lui
-      // communiquer le nouvel assignment saisi dans le form
-      // et lui dire de le rajouter au tableau
-      // this.nouvelAssignment.emit(newAssignment);
-      this.assignmentsService.addAssignment(newAssignment)
-        .subscribe(reponse => {
-          console.log(reponse.message);
-        });
-    });
+    const data = {
+      assignment: newAssignment,
+      students: this.selectedStudents
+    };
+
+    this.assignmentsService.addAssignment(data)
+      .subscribe(response => {
+        console.log(response.message);
+      });
 
     // dire qu'on veut de nouveau afficher la liste
     this.router.navigate(['/home']);

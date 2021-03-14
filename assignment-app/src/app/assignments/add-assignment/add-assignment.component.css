@@ -18,5 +18,9 @@
 }
 
 .selectContainer{
-  background-color: #ffffff;
+  background-color: #e0e0e0;
+}
+
+#wrapper{
+  height: 100vh;
 }

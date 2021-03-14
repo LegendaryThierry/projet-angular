@@ -2,20 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../../models/assignment.model';
+import {StudentAssignment} from '../../models/studentAssignment';
+import {StudentAssignmentsService} from '../../shared/studentAssignments';
 
 @Component({
   selector: 'app-edit-assigment',
-  templateUrl: './edit-assigment.component.html',
-  styleUrls: ['./edit-assigment.component.css']
+  templateUrl: './edit-student-assigment.component.html',
+  styleUrls: ['./edit-student-assigment.component.css']
 })
-export class EditAssigmentComponent implements OnInit {
-  assignment: Assignment;
+export class EditStudentAssigmentComponent implements OnInit {
+  assignment: StudentAssignment;
   // pour les champs du formulaire
   nomAssignment: string;
   dateDeRendu: Date;
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private assignmentsService: AssignmentsService) { }
+              private studentAssignmentsService: StudentAssignmentsService) { }
 
   ngOnInit(): void {
     const nomPasseDansURL = this.route.snapshot.queryParams.nom;
@@ -29,14 +31,14 @@ export class EditAssigmentComponent implements OnInit {
   getAssignment(): void {
      // on va récupérer l'id dans la route comme pour le composant d'ajout
     // ne pas oublier le "+" pour le transformer en number (sinon c'est une chaine de caractères)
-    const id = +this.route.snapshot.params.id;
+    const id = this.route.snapshot.params.id;
     console.log('EDIT id = ' + id);
 
-    this.assignmentsService.getAssignment(id)
+    this.studentAssignmentsService.getStudentAssignment(id)
     .subscribe(a => {
       if (a) {
         this.assignment = a;
-        this.nomAssignment = a.nom;
+        this.nomAssignment = a.assignment.nom;
         this.dateDeRendu = a.dateDeRendu;
       }
 
@@ -47,10 +49,10 @@ export class EditAssigmentComponent implements OnInit {
     if (! this.nomAssignment) { return; }
     if (! this.dateDeRendu) { return; }
 
-    this.assignment.nom = this.nomAssignment;
+    this.assignment.assignment.nom = this.nomAssignment;
     this.assignment.dateDeRendu = this.dateDeRendu;
 
-    this.assignmentsService.updateAssignment(this.assignment)
+    this.studentAssignmentsService.updateStudentAssignment(this.assignment)
     .subscribe(reponse => {
       console.log(reponse.message);
 

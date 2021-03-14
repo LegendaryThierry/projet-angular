@@ -54,7 +54,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AssignmentDetailComponent } from './assignments/assignment-detail/assignment-detail.component';
 import { AddAssignmentComponent } from './assignments/add-assignment/add-assignment.component';
 import {Routes, RouterModule} from '@angular/router';
-import { EditAssigmentComponent } from './assignments/edit-assigment/edit-assigment.component';
+import { EditStudentAssigmentComponent } from './assignments/edit-student-assigment/edit-student-assigment.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { ConnexionComponent } from './dialog/connexion/connexion.component';
@@ -63,19 +63,21 @@ import {lightTheme} from './theme/light-theme';
 import {ThemeModule} from './theme/theme.module';
 import {darkTheme} from './theme/dark-theme';
 import { GradeComponent } from './dialog/grade/grade.component';
+import { EditAssignmentComponent } from './dialog/edit-assignment/edit-assignment.component';
+import { ConfirmationComponent } from './dialog/confirmation/confirmation.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
   {path: 'home', component: AssignmentsComponent},
   {path: 'add', component: AddAssignmentComponent},
   {path: 'assignment/:id', component: AssignmentDetailComponent},
-  {path: 'assignment/:id/edit', component: EditAssigmentComponent}
+  {path: 'assignment/:id/edit', component: EditStudentAssigmentComponent}
 
 ];
 
 @NgModule({
   declarations: [AppComponent, AssignmentsComponent, RenduDirective, AssignmentDetailComponent,
-    AddAssignmentComponent, EditAssigmentComponent, ConnexionComponent, MainComponent, GradeComponent],
+    AddAssignmentComponent, EditStudentAssigmentComponent, ConnexionComponent, MainComponent, GradeComponent, EditAssignmentComponent, ConfirmationComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
