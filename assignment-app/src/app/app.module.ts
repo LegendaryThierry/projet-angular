@@ -140,6 +140,8 @@ const routes: Routes = [
     ScrollingModule,
     ReactiveFormsModule,
     BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
     ThemeModule.forRoot({
       themes: [lightTheme, darkTheme],
       active: 'light'

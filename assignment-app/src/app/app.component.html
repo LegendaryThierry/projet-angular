@@ -1,19 +1,27 @@
 <!-- BARRE DE MENU -->
-<div app-theme>
+<div app-theme xmlns:font-size="http://www.w3.org/1999/xhtml">
   <div class="main container">
 
   <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button>
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseover)="menuTrigger.openMenu()">
       <mat-icon>menu</mat-icon>
     </button>
-    <h1 [routerLink]="['/home']">{{title}}</h1>
-    <span class="menu-spacer"></span>
-    <span>Dark Mode</span>
+
+    <mat-menu #menu="matMenu" [overlapTrigger]="false">
+    <span (mouseleave)="menuTrigger.closeMenu()">
+          <span> Dark Mode </span>
     <label class="switch">
       <input type="checkbox" (click)="toggle()" >
       <span class="slider round"></span>
     </label>
+          </span>
+
+    </mat-menu>
+
+    <h1 [routerLink]="['/home']">{{title}}</h1>
+    <span class="menu-spacer"></span>
+
     <div *ngIf="user == null">
       <button mat-raised-button (click)="openConnexionDialog()"> Login </button>
       <button mat-raised-button> Register </button>
