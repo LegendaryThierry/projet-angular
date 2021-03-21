@@ -81,3 +81,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+::ng-deep .mat-menu-panel {
+  height: 300px;
+  width: 300px;
+}

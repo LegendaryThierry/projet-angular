@@ -10,11 +10,21 @@
 
     <mat-menu #menu="matMenu" [overlapTrigger]="false">
       <span (mouseleave)="menuTrigger.closeMenu()">
-          <span> Dark Mode </span>
+          <span>Dark Mode </span>
           <label class="switch">
-            <input type="checkbox" (click)="toggle()" >
+            <input type="checkbox" (click)="toggle()">
             <span class="slider round"></span>
           </label>
+        <br/>
+        <br/>
+
+        <p>ID Card:</p>
+        <label *ngIf="user !== undefined">{{this.user.first_name}} {{this.user.last_name}}</label>
+        <br/>
+        <picture *ngIf="user !== undefined">
+          <source media='(min-width:0px)' [srcset]=this.user.picture>
+          <img mat-card-image src=this.user.picture alt="Photo:" class="imageContainer">
+        </picture>
       </span>
     </mat-menu>
 
