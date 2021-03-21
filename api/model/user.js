@@ -1,3 +1,5 @@
+// Informations liées à un utilisateur
+
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 

@@ -10,6 +10,8 @@ import {StudentAssignmentsService} from '../../shared/studentAssignments';
   templateUrl: './edit-student-assigment.component.html',
   styleUrls: ['./edit-student-assigment.component.css']
 })
+
+// Ce composant a été remplacé par un dialog
 export class EditStudentAssigmentComponent implements OnInit {
   assignment: StudentAssignment;
   // pour les champs du formulaire

@@ -14,13 +14,14 @@ export class ConfirmationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Retourne vrai
   onSubmit(event): void{
     event.preventDefault();
 
     this.dialogRef.close(true);
   }
 
-  // Fermer le dialog
+  // Retourne faux
   closeDialog(): void{
     this.dialogRef.close(false);
   }

@@ -17,7 +17,7 @@ function getAssignments(req, res){
         });
 }
 
-// Récupérer un assignment par son id (GET)
+// Récupérer un assignment à l'aide son id (GET)
 function getAssignment(req, res){
     let assignmentId = req.params.id;
 
@@ -48,6 +48,7 @@ function postAssignment(req, res){
             res.send('cant post assignment ', err);
         }
 
+        // Nous insérons un nouvel enregistrement de type StudentAssignment pour chaque élève lié au nouveau devoir
         req.body.students.forEach(studentAssignmentData => {
             console.log(studentAssignmentData);
             let studentAssignment = new StudentAssignment();
@@ -82,7 +83,7 @@ function updateAssignment(req, res) {
     });
 }
 
-// suppression d'un assignment (DELETE)
+// Suppression d'un assignment (DELETE)
 function deleteAssignment(req, res) {
     Assignment.findByIdAndRemove(req.params.id, (err, assignment) => {
         if (err) {
@@ -98,6 +99,7 @@ function deleteAssignment(req, res) {
     })
 }
 
+// N'est plus utilisé
 function getDistinctAssignments(req, res){
     let resultArray = [];
 

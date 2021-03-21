@@ -1,45 +1,43 @@
 <!-- BARRE DE MENU -->
-<div app-theme xmlns:font-size="http://www.w3.org/1999/xhtml">
+<main app-theme xmlns:font-size="http://www.w3.org/1999/xhtml">
   <div class="main container">
 
-  <mat-toolbar color="primary">
+  <mat-toolbar class="shadow-lg" color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseover)="menuTrigger.openMenu()">
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (click)="menuTrigger.openMenu()">
       <mat-icon>menu</mat-icon>
     </button>
 
     <mat-menu #menu="matMenu" [overlapTrigger]="false">
-      <span (mouseleave)="menuTrigger.closeMenu()">
-          <span>Dark Mode </span>
-          <label class="switch">
-            <input type="checkbox" (click)="toggle()">
-            <span class="slider round"></span>
-          </label>
-        <br/>
-        <br/>
-
-        <p>ID Card:</p>
-        <label *ngIf="user !== undefined">{{this.user.first_name}} {{this.user.last_name}}</label>
-        <br/>
-        <picture *ngIf="user !== undefined">
-          <source media='(min-width:0px)' [srcset]=this.user.picture>
-          <img mat-card-image src=this.user.picture alt="Photo:" class="imageContainer">
+      <div *ngIf="user !== undefined">
+        <picture>
+          <source [srcset]=this.user.picture>
+          <img id="userImage" mat-card-image alt="Photo:" class="imageContainer">
         </picture>
-      </span>
+        <br />
+        <p id="userName">{{this.user.first_name}} {{this.user.last_name}}</p>
+
+        <hr />
+      </div>
+
+      <div class="mx-2 align-middle">
+        <span>Dark Mode</span>
+        <label class="switch">
+          <input type="checkbox" (click)="toggle()">
+          <span class="slider round"></span>
+        </label>
+      </div>
     </mat-menu>
 
     <h1 [routerLink]="['/home']">{{title}}</h1>
     <span class="menu-spacer"></span>
 
-    <label *ngIf="user !== undefined">{{this.user.first_name}} {{this.user.last_name}}</label>
+    <label *ngIf="user !== undefined" class="mx-2">{{this.user.first_name}} {{this.user.last_name}}</label>
 
-    <div *ngIf="user === undefined">
-      <button mat-raised-button (click)="openConnexionDialog()"> Login </button>
-      <button mat-raised-button> Register </button>
-    </div>
+    <button *ngIf="user === undefined" mat-raised-button (click)="openConnexionDialog()"><i class="bi bi-door-open-fill"></i> Login</button>
 
     <div *ngIf="user !== undefined">
-      <button mat-raised-button (click)="disconnect()"> Disconnect </button>
+      <button mat-raised-button (click)="disconnect()"><i class="bi bi-door-closed-fill"></i>  Disconnect</button>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -47,4 +45,4 @@
 <!-- router-outlet désigne le composant défini par le routeur -->
 <router-outlet></router-outlet>
   </div>
-</div>
+</main>

@@ -23,10 +23,10 @@
 
   <mat-dialog-actions>
     <button mat-raised-button color="primary" (click)="onSubmit($event); connexionForm.reset();">
-      Connexion
+      <i class="bi bi-door-open-fill"></i> Connexion
     </button>
     <button mat-raised-button (click)="closeDialog()" color="warn">
-      Fermer
+      <mat-icon>clear</mat-icon> Fermer
     </button>
   </mat-dialog-actions>
 </form>

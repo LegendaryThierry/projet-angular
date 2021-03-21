@@ -8,7 +8,6 @@
 }
 .menu-spacer {
   flex: 1 1 auto;
-
 }
 
 h1{
@@ -82,6 +81,19 @@ input:checked + .slider:before {
 }
 
 ::ng-deep .mat-menu-panel {
-  height: 300px;
-  width: 300px;
+  max-height: 500px;
+}
+
+#userImage {
+  width: 50%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#userName{
+  text-align: center;
+  font-size: 14px;
+  font-style: italic;
 }

@@ -15,6 +15,7 @@ export class EditAssignmentComponent implements OnInit {
 
   }
 
+  // Retourne les champs et données de l'Assignment à modifier
   onSubmit(event): void{
     event.preventDefault();
 

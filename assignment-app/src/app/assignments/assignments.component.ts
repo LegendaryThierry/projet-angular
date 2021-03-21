@@ -59,7 +59,9 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     private cookieService: CookieService, private dialog: MatDialog, private assignmentsService: AssignmentsService,
     private studentAssignmentsService: StudentAssignmentsService, private router: Router) {}
 
+  // Récupération et tri de tous les assignments
   ngOnInit(): void {
+    // Récupération des informations de l'utilisateur à partir du cookie généré lors de sa connexion
     const user = JSON.parse(this.cookieService.get('UserID'));
     this.user = new User();
     this.user._id = user._id;
@@ -152,6 +154,7 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     // this.dataSource.sort = this.sort;
   }
 
+  // Ouverture du dialog pour éditer un Assignment
   openEditAssignmentDialog(row): void{
     this.editAssignmentDialogRef = this.dialog.open(EditAssignmentComponent, {
       data:
@@ -184,6 +187,7 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     });
   }
 
+  // Ouverture du dialog de confirmation pour supprimer un Assignment
   openDeleteAssignmentDialog(row): void{
     this.deleteAssignmentDialogRef = this.dialog.open(ConfirmationComponent, {
       data:
@@ -207,6 +211,7 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     this.router.navigate(['/assignment/' + row.id]);
   }
 
+  // Comparaison entre 2 dates
   isAssignmentInTime(dateLimite: string): boolean{
     const a = new Date(Date.now());
     const b = new Date(dateLimite);

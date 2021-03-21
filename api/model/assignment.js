@@ -1,3 +1,5 @@
+// Informations générale associé à un devoir
+
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 

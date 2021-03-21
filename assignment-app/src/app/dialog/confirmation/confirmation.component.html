@@ -8,10 +8,10 @@
 
       <mat-dialog-actions>
         <button mat-raised-button color="primary" (click)="onSubmit($event); confirmationForm.reset();">
-          Valider
+          <mat-icon>check</mat-icon> Valider
         </button>
         <button mat-raised-button (click)="closeDialog()" color="warn">
-          Annuler
+          <mat-icon>clear</mat-icon> Annuler
         </button>
       </mat-dialog-actions>
     </form>

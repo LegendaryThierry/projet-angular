@@ -1,27 +1,53 @@
-# AssignmentApp
+# Pour lancer l'application :
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.2.
+1. Lancer l'API :
+  * ```cd api```
+  * ```node server```
 
-## Development server
+2. Lancer le site :
+  * ```cd assignment-app```
+  * ```npm install```
+  * ```ng serve```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+3. Se connecter :
+  * Différents type d'utilisateurs :
+    + élève : id : alexis/password:vighi
+    + professeur: id:marion/password:quinn
+    + admin: id:admin/password:admin
 
-## Code scaffolding
+## Sujet du projet : améliorer le TP sur les Assignments
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+###  Travail attendu
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Les améliorations TP sont les suivantes :
 
-## Running unit tests
+-   **Ajout d'une gestion de login/password**
+  -   Création d'une collection Utilisateurs dans MongoDB, et en validant que le user/password est correct.
+  -   Cas particulier : User admin.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+-   **Propriétés du modèle d'Assignement**
+  -   Auteur (nom de l'élève)
+  -   Matière
+    -   Une image est associée à chaque matière et une photo du prof
+  -   Note sur 20, on ne peut marquer "rendu" un Assignment qui n'a pas été noté.
+  -   Remarques
 
-## Running end-to-end tests
+-   **Amélioration de l'affichage des Assignments**
+  -   Nouveaux emplacements pour la visualisation des devoirs à rendre/rendu, sous forme de tableaux.
+  -   La vue détaillé montre la note, les remarques le professeur, l'élève, le temps qu'il reste lors de la remise du devoir.
+  -   Les formulaires d'ajout et de détails proposeront un choix fixe de matières (et associeront automatiquement le prof et l'image illustrant la matière)
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+-   **Afficher les Assignments dans deux onglets séparés selon qu'ils ont été rendus ou pas encore rendus**
+  -   Lorsqu'on met une note à un Assignment et il devient rendu et apparaitra dans l'onglet "Rendu"
 
-## Further help
+-   **Utilisation d'un Formulaire de type Stepper (formulaire en plusieurs étapes) pour l'ajout d'Assignments**
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+-   **Le sujet est ouvert, vous pouvez ajouter ce qui vous semble amusant/pertinent:**
+  -   Image avec animation CSS
+  - Dark Mode
+  - Sécurisation des routes
+  - Restriction des accès utilisateurs
+  - Respect des normes du langage TypeScript
+  - Respect des normes de Material Design

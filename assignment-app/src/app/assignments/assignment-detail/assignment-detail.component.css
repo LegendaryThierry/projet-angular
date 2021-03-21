@@ -11,3 +11,7 @@
 .redBackground{
   background-color: #e57373;
 }
+
+mat-card-subtitle{
+  font-size: 20px;
+}

@@ -1,3 +1,5 @@
+// Informations du devoir spécifique à un étudiant
+
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 

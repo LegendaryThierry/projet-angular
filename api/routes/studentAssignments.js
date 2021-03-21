@@ -1,7 +1,7 @@
 let StudentAssignment = require('../model/studentAssignment');
 const mongoose = require('mongoose');
 
-// Récupérer tous les assignments (GET)
+// Récupérer tous les StudentAssignments (GET)
 function getStudentAssignments(req, res){
     StudentAssignment.find()
         .populate({
@@ -24,7 +24,7 @@ function getStudentAssignments(req, res){
         });
 }
 
-// Récupérer un assignment par son id (GET)
+// Récupérer un StudentAssignment à l'aide de son id (GET)
 function getStudentAssignment(req, res){
     let assignmentId = req.params.id;
 
@@ -48,7 +48,7 @@ function getStudentAssignment(req, res){
         });
 }
 
-// Ajout d'un assignment (POST)
+// Ajout d'un StudentAssignment (POST)
 function postStudentAssignment(req, res){
     console.log(req.body);
     req.body.students.forEach(student => {
@@ -69,7 +69,7 @@ function postStudentAssignment(req, res){
     });
 }
 
-// Update d'un assignment (PUT)
+// Update d'un StudentAssignment (PUT)
 function updateStudentAssignment(req, res) {
     StudentAssignment.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, assignment) => {
         if (err) {
@@ -80,7 +80,7 @@ function updateStudentAssignment(req, res) {
     });
 }
 
-// suppression d'un assignment (DELETE)
+// Suppression d'un StudentAssignment (DELETE)
 function deleteStudentAssignment(req, res) {
 
     StudentAssignment.findByIdAndRemove(req.params.id, (err, assignment) => {

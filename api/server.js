@@ -52,6 +52,15 @@ app.route(prefix + '/assignments')
     .post(assignment.postAssignment)
     .put(assignment.updateAssignment);
 
+app.route(prefix + '/assignments/distinct')
+    .get(assignment.getDistinctAssignments)
+
+app.route(prefix + '/assignments/:id')
+  .get(assignment.getAssignment)
+  .delete(assignment.deleteAssignment);
+
+// ----- STUDENT-ASSIGNMENTS ROUTES -----
+
 app.route(prefix + '/student-assignments')
     .get(studentAssignment.getStudentAssignments)
     .post(studentAssignment.postStudentAssignment)
@@ -60,13 +69,6 @@ app.route(prefix + '/student-assignments')
 app.route(prefix + '/student-assignments/:id')
     .get(studentAssignment.getStudentAssignment)
     .delete(studentAssignment.deleteStudentAssignment);
-
-app.route(prefix + '/assignments/distinct')
-    .get(assignment.getDistinctAssignments)
-
-app.route(prefix + '/assignments/:id')
-  .get(assignment.getAssignment)
-  .delete(assignment.deleteAssignment);
 
 // ----- USERS ROUTES -----
 app.route(prefix + '/users')

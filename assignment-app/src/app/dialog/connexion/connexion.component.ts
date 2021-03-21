@@ -28,10 +28,11 @@ export class ConnexionComponent implements OnInit {
     // console.log('Username: ' + this.username);
     // console.log('Password: ' + this.password);
 
-    // les deux champs sont obligatoires...
+    // Les deux champs sont obligatoires...
     if (!this.username) { return; }
     if (!this.password) { return; }
 
+    // Appel à la base de données pour checker la validité des identifiants entrées par l'utilisateur
     this.usersService.findUser(this.username, this.password).subscribe(user => {
       if (user != null){
         this.dialogRef.close(user);

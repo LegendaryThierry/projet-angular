@@ -67,8 +67,8 @@
       </table>
 
       <div *ngIf="user.role !== 'student'">
-        <button class="btn btn-primary" color="primary" (click)="openGradeDialog()">NOTER</button>
-        <button class="mx-2 btn btn-danger" (click)="openDeleteDialog()">DELETE</button>
+        <button class="btn btn-primary" color="primary" (click)="openGradeDialog()"><i class="bi bi-pen-fill"></i> NOTER</button>
+        <button class="mx-2 btn btn-danger" (click)="openDeleteDialog()"><i class="bi bi-trash-fill"></i> SUPPRIMER</button>
       </div>
 
       <div *ngIf="user.role === 'student' && assignmentTransmis.rendu === false">

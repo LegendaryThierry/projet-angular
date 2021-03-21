@@ -75,6 +75,7 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }*/
 
+  // Dialog pour noter un devoir
   openGradeDialog(): void{
     this.gradeDialogRef = this.dialog.open(GradeComponent);
 
@@ -86,6 +87,7 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }
 
+  // Dialog de confirmation pour supprimer un devoir
   openDeleteDialog(): void{
     this.deleteDialogRef = this.dialog.open(ConfirmationComponent, {
       data:
@@ -101,6 +103,7 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }
 
+  // Dialog de confirmation pour rendre un devoir
   openSubmitDialog(): void{
     this.submitDialogRef = this.dialog.open(ConfirmationComponent, {
       data:
@@ -116,6 +119,7 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }
 
+  // Rendre un devoir
   submit(): void{
     this.assignmentTransmis.rendu = true;
     this.assignmentTransmis.dateDeRendu = new Date(Date.now());
@@ -128,6 +132,7 @@ export class AssignmentDetailComponent implements OnInit {
       });
   }
 
+  // Noter un devoir
   giveGrade(grade: number, comment: string): void{
     this.assignmentTransmis.rendu = true;
     this.assignmentTransmis.note = grade;
@@ -141,6 +146,7 @@ export class AssignmentDetailComponent implements OnInit {
       });
   }
 
+  // Supprimer le devoir d'un étudiant
   onDelete(): void {
     // dans la version précédent ici on prévenait le père par un
     // événement etc. mais maintenant qu'on a un service, pas la peine !
@@ -156,6 +162,7 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }
 
+  // N'est plus utilisé
   onEdit(): void {
     this.router.navigate(['assignment', this.assignmentTransmis._id, 'edit'],
     {
@@ -164,11 +171,13 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }
 
+  // Calcul du temps en millisecondes entre 2 dates
   getRemainingTime(startDateTime: number, endDateTime: number): number{
     const differenceInMilliseconds = startDateTime - endDateTime;
     return differenceInMilliseconds;
   }
 
+  // Conversion des millisecondes en jour, heure, minute et secondes
   convertMS( milliseconds: number ): { day: number; hour: number; minute: number; seconds: number} {
     let seconds = Math.floor(milliseconds / 1000);
     let minute = Math.floor(seconds / 60);
