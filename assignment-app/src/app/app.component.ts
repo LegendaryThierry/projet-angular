@@ -3,6 +3,8 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ConnexionComponent} from './dialog/connexion/connexion.component';
 import {NavigationEnd, Router} from '@angular/router';
 import {ThemeService} from './theme/theme.service';
+import {CookieService} from 'ngx-cookie-service';
+import {User} from './models/users.model';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +13,12 @@ import {ThemeService} from './theme/theme.service';
 })
 export class AppComponent implements OnInit{
   title = 'Assignment App';
-  user = null;
   currentRoute = '';
   connexionDialogRef: MatDialogRef<ConnexionComponent>; // Référence du Dialog pour pouvoir l'utiliser dans le composant fils
+  user: User;
 
-  constructor(private connexionDialog: MatDialog, private router: Router, private themeService: ThemeService) {}
+  constructor(private cookieService: CookieService, private connexionDialog: MatDialog,
+              private router: Router, private themeService: ThemeService) {}
 
   // tslint:disable-next-line:typedef
   toggle() {
@@ -31,28 +34,46 @@ export class AppComponent implements OnInit{
     this.connexionDialogRef = this.connexionDialog.open(ConnexionComponent);
 
     this.connexionDialogRef.afterClosed().subscribe(user => {
-      this.user = user;
-      console.log(user);
-      if (this.user !== null){
+      if (user !== null){
+        const expiredDate = new Date();
+        expiredDate.setDate(expiredDate.getDate() + 7);
+        this.cookieService.set( 'UserID', JSON.stringify(user), expiredDate);
+        this.getUserInfo(JSON.stringify(user));
         this.router.navigate(['/home']); // On redirige l'utilisateur si la connexion a réussi
       }
     });
   }
 
+  getUserInfo(jsonString: string): void{
+      const json = JSON.parse(jsonString);
+      this.user = new User();
+      this.user._id = json._id;
+      this.user.first_name = json.first_name;
+      this.user.last_name = json.last_name;
+  }
+
   disconnect(): void{
-    this.user = null;
+    this.cookieService.delete('UserID');
+    this.user = undefined;
     this.router.navigate(['/']);
   }
 
   // Redirection de l'utilisateur vers la page d'accueil s'il n'est pas connecté. Désactivé lors du développement
   ngOnInit(): void {
-    // this.router.events.subscribe(event =>
-    //   {
-    //     if (event instanceof NavigationEnd){
-    //       if (this.user == null && event.url !== '/'){
-    //         this.router.navigate(['/']);
-    //       }
-    //     }
-    //   });
+    if (this.user === undefined){
+      const jsonString = this.cookieService.get('UserID');
+      if (jsonString !== '' && jsonString !== 'undefined') {
+        this.getUserInfo(jsonString);
+      }
+    }
+
+    this.router.events.subscribe(event =>
+      {
+        if (event instanceof NavigationEnd){
+          if ((this.user === null || this.user === undefined) && event.url !== '/'){
+            this.router.navigate(['/']);
+          }
+        }
+      });
   }
 }

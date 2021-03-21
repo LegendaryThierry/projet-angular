@@ -9,24 +9,26 @@
     </button>
 
     <mat-menu #menu="matMenu" [overlapTrigger]="false">
-    <span (mouseleave)="menuTrigger.closeMenu()">
+      <span (mouseleave)="menuTrigger.closeMenu()">
           <span> Dark Mode </span>
-    <label class="switch">
-      <input type="checkbox" (click)="toggle()" >
-      <span class="slider round"></span>
-    </label>
-          </span>
-
+          <label class="switch">
+            <input type="checkbox" (click)="toggle()" >
+            <span class="slider round"></span>
+          </label>
+      </span>
     </mat-menu>
 
     <h1 [routerLink]="['/home']">{{title}}</h1>
     <span class="menu-spacer"></span>
 
-    <div *ngIf="user == null">
+    <label *ngIf="user !== undefined">{{this.user.first_name}} {{this.user.last_name}}</label>
+
+    <div *ngIf="user === undefined">
       <button mat-raised-button (click)="openConnexionDialog()"> Login </button>
       <button mat-raised-button> Register </button>
     </div>
-    <div *ngIf="user != null">
+
+    <div *ngIf="user !== undefined">
       <button mat-raised-button (click)="disconnect()"> Disconnect </button>
     </div>
   </mat-toolbar-row>

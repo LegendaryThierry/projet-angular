@@ -7,6 +7,8 @@ import {GradeComponent} from '../../dialog/grade/grade.component';
 import {StudentAssignment} from '../../models/studentAssignment';
 import {StudentAssignmentsService} from '../../shared/studentAssignments';
 import {ConfirmationComponent} from '../../dialog/confirmation/confirmation.component';
+import {CookieService} from 'ngx-cookie-service';
+import {User} from '../../models/users.model';
 
 @Component({
   selector: 'app-assignment-detail',
@@ -18,8 +20,13 @@ export class AssignmentDetailComponent implements OnInit {
   assignmentTransmis: StudentAssignment;
   gradeDialogRef: MatDialogRef<GradeComponent>;
   deleteDialogRef: MatDialogRef<ConfirmationComponent>;
+  submitDialogRef: MatDialogRef<ConfirmationComponent>;
+  user: User;
+  remainingTime: { day: number; hour: number; minute: number; seconds: number};
+  remainingTimeInMilliseconds: number;
 
   constructor(
+    private cookieService: CookieService,
     private dialog: MatDialog,
     private studentAssignmentsService: StudentAssignmentsService,
     private route: ActivatedRoute,
@@ -30,12 +37,30 @@ export class AssignmentDetailComponent implements OnInit {
     // on récupère l'id dans l'URL, attention par défaut c'est de type string
     // on va devoir le changer en number. Pour cela en typescript il suffit de
     // mettre un "+" devant
+
+    const user = JSON.parse(this.cookieService.get('UserID'));
+    this.user = new User();
+    this.user._id = user._id;
+    this.user.role = user.role;
+
     const id = this.route.snapshot.params.id;
 
     // On recupère l'assignment correspondant à l'id
     this.studentAssignmentsService.getStudentAssignment(id)
     .subscribe(a => {
       this.assignmentTransmis = a;
+      if (this.assignmentTransmis.rendu === false){
+        // Combien de temps, il lui reste pour rendre le devoir ?
+        this.remainingTimeInMilliseconds = this.getRemainingTime(new Date(Date.now()).getTime(),
+          new Date(this.assignmentTransmis.assignment.dateLimite).getTime());
+        this.remainingTime = this.convertMS(Math.abs(this.remainingTimeInMilliseconds));
+      }
+      else{
+        // Combien de temps, il a rendu le devoir à l'avance ?
+        this.remainingTimeInMilliseconds = this.getRemainingTime(new Date(this.assignmentTransmis.dateDeRendu).getTime(),
+          new Date(this.assignmentTransmis.assignment.dateLimite).getTime());
+        this.remainingTime = this.convertMS(Math.abs(this.remainingTimeInMilliseconds));
+      }
     });
   }
 
@@ -76,10 +101,36 @@ export class AssignmentDetailComponent implements OnInit {
     });
   }
 
+  openSubmitDialog(): void{
+    this.submitDialogRef = this.dialog.open(ConfirmationComponent, {
+      data:
+        {
+          question: 'Voulez-vous envoyer votre devoir ?'
+        },
+    });
+
+    this.submitDialogRef.afterClosed().subscribe(result => {
+      if (result === true){
+        this.submit();
+      }
+    });
+  }
+
+  submit(): void{
+    this.assignmentTransmis.rendu = true;
+    this.assignmentTransmis.dateDeRendu = new Date(Date.now());
+
+    this.studentAssignmentsService.updateStudentAssignment(this.assignmentTransmis)
+      .subscribe(reponse => {
+        console.log(reponse.message);
+        // et on navigue vers la liste
+        this.router.navigate(['/home']);
+      });
+  }
+
   giveGrade(grade: number, comment: string): void{
     this.assignmentTransmis.rendu = true;
     this.assignmentTransmis.note = grade;
-    this.assignmentTransmis.dateDeRendu = new Date(Date.now());
     this.assignmentTransmis.remarque = comment;
 
     this.studentAssignmentsService.updateStudentAssignment(this.assignmentTransmis)
@@ -111,5 +162,26 @@ export class AssignmentDetailComponent implements OnInit {
       queryParams: {nom: this.assignmentTransmis._id},
       fragment: 'edition'
     });
+  }
+
+  getRemainingTime(startDateTime: number, endDateTime: number): number{
+    const differenceInMilliseconds = startDateTime - endDateTime;
+    return differenceInMilliseconds;
+  }
+
+  convertMS( milliseconds: number ): { day: number; hour: number; minute: number; seconds: number} {
+    let seconds = Math.floor(milliseconds / 1000);
+    let minute = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    let hour = Math.floor(minute / 60);
+    minute = minute % 60;
+    const day = Math.floor(hour / 24);
+    hour = hour % 24;
+    return {
+      day,
+      hour,
+      minute,
+      seconds
+    };
   }
 }

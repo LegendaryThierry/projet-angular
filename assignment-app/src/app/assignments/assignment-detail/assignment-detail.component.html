@@ -8,9 +8,71 @@
         {{"Elève: " + assignmentTransmis.eleve.first_name + " " + assignmentTransmis.eleve.last_name}}
       </mat-card-subtitle>
 
-      <div>
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <th scope="row col-sm-3">Statut des travaux remis</th>
+            <td *ngIf="assignmentTransmis.rendu === false" class="offset-sm-1">Non rendu</td>
+            <td [ngClass]="'greenBackground'" *ngIf="assignmentTransmis.rendu === true" class="offset-sm-1">Remis pour évaluation</td>
+          </tr>
+          <tr>
+            <th scope="row col-sm-3">Temps restant</th>
+            <td [ngClass]="'greenBackground'" class="offset-sm-1" *ngIf="this.remainingTimeInMilliseconds <= 0 && this.assignmentTransmis.rendu === true">Le devoir a été remis en avance de
+              <span *ngIf="this.remainingTime.day > 0"> {{this.remainingTime.day}} jours</span>
+              <span *ngIf="this.remainingTime.hour > 0"> {{this.remainingTime.hour}} heures</span>
+              <span *ngIf="this.remainingTime.minute > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0)"> {{this.remainingTime.minute}} minutes</span>
+              <span *ngIf="this.remainingTime.seconds > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0 || this.remainingTime.minute > 0)"> {{this.remainingTime.seconds}} secondes</span>
+            </td>
+            <td [ngClass]="'redBackground'" class="offset-sm-1" *ngIf="this.remainingTimeInMilliseconds > 0 && this.assignmentTransmis.rendu === true">Le devoir a été remis en retard de
+              <span *ngIf="this.remainingTime.day > 0"> {{this.remainingTime.day}} jours</span>
+              <span *ngIf="this.remainingTime.hour > 0"> {{this.remainingTime.hour}} heures</span>
+              <span *ngIf="this.remainingTime.minute > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0)"> {{this.remainingTime.minute}} minutes</span>
+              <span *ngIf="this.remainingTime.seconds > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0 || this.remainingTime.minute > 0)"> {{this.remainingTime.seconds}} secondes</span>
+            </td>
+
+
+              <td class="offset-sm-1" *ngIf="this.remainingTimeInMilliseconds <= 0 && this.assignmentTransmis.rendu === false">Il reste
+                <span *ngIf="this.remainingTime.day > 0"> {{this.remainingTime.day}} jours</span>
+                <span *ngIf="this.remainingTime.hour > 0"> {{this.remainingTime.hour}} heures</span>
+                <span *ngIf="this.remainingTime.minute > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0)"> {{this.remainingTime.minute}} minutes</span>
+                <span *ngIf="this.remainingTime.seconds > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0 || this.remainingTime.minute > 0)"> {{this.remainingTime.seconds}} secondes</span>
+              </td>
+              <td [ngClass]="'redBackground'" class="offset-sm-1" *ngIf="this.remainingTimeInMilliseconds > 0 && this.assignmentTransmis.rendu === false">Devoir en retard de
+                <span *ngIf="this.remainingTime.day > 0"> {{this.remainingTime.day}} jours</span>
+                <span *ngIf="this.remainingTime.hour > 0"> {{this.remainingTime.hour}} heures</span>
+                <span *ngIf="this.remainingTime.minute > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0)"> {{this.remainingTime.minute}} minutes</span>
+                <span *ngIf="this.remainingTime.seconds > 0 && (this.remainingTime.day > 0 || this.remainingTime.hour > 0 || this.remainingTime.minute > 0)"> {{this.remainingTime.seconds}} secondes</span>
+              </td>
+          </tr>
+          <tr>
+            <th scope="row col-sm-3">Date de remise</th>
+            <td *ngIf="assignmentTransmis.rendu === false" class="offset-sm-1">Non rendu</td>
+            <td *ngIf="assignmentTransmis.rendu === true" class="offset-sm-1">{{assignmentTransmis.dateDeRendu | date:'dd/MM/YYYY HH:mm:ss'}}</td>
+          </tr>
+          <tr>
+            <th scope="row col-sm-3">Statut de l'évaluation</th>
+            <td *ngIf="assignmentTransmis.rendu === false" class="offset-sm-1">Non rendu</td>
+            <td *ngIf="assignmentTransmis.note === null && assignmentTransmis.rendu === true" class="offset-sm-1">En cours de correction...</td>
+            <td *ngIf="assignmentTransmis.note !== null && assignmentTransmis.rendu === true" class="offset-sm-1">Corrigé</td>
+          </tr>
+          <tr *ngIf="assignmentTransmis.note !== null">
+            <th scope="row col-sm-3">Note</th>
+            <td class="offset-sm-1">{{this.assignmentTransmis.note}} / 20</td>
+          </tr>
+          <tr *ngIf="assignmentTransmis.note !== null">
+            <th scope="row col-sm-3">Remarque</th>
+            <td *ngIf="assignmentTransmis.note !== null" class="offset-sm-1">{{this.assignmentTransmis.remarque}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="user.role !== 'student'">
         <button class="btn btn-primary" color="primary" (click)="openGradeDialog()">NOTER</button>
         <button class="mx-2 btn btn-danger" (click)="openDeleteDialog()">DELETE</button>
+      </div>
+
+      <div *ngIf="user.role === 'student' && assignmentTransmis.rendu === false">
+        <button class="btn btn-primary" color="primary" (click)="openSubmitDialog()">RENDRE LE DEVOIR</button>
       </div>
     </mat-card>
     </div>

@@ -10,6 +10,7 @@ import {EditAssignmentComponent} from '../dialog/edit-assignment/edit-assignment
 import {StudentAssignmentsService} from '../shared/studentAssignments';
 import {StudentAssignment} from '../models/studentAssignment';
 import {ConfirmationComponent} from '../dialog/confirmation/confirmation.component';
+import {CookieService} from 'ngx-cookie-service';
 
 export interface AssignmentRow{
   _id: string;
@@ -50,17 +51,27 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
   ELEMENT_DATA_ASSIGNMENT: AssignmentRow[] = [];
   editAssignmentDialogRef: MatDialogRef<EditAssignmentComponent>;
   deleteAssignmentDialogRef: MatDialogRef<ConfirmationComponent>;
+  user: User;
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private dialog: MatDialog, private assignmentsService: AssignmentsService,
-              private studentAssignmentsService: StudentAssignmentsService, private router: Router) {}
+  constructor(
+    private cookieService: CookieService, private dialog: MatDialog, private assignmentsService: AssignmentsService,
+    private studentAssignmentsService: StudentAssignmentsService, private router: Router) {}
 
   ngOnInit(): void {
+    const user = JSON.parse(this.cookieService.get('UserID'));
+    this.user = new User();
+    this.user._id = user._id;
+    this.user.role = user.role;
 
     // Tableau des devoirs
     this.assignmentsService.getAssignments().subscribe((assignments: Assignment[]) => {
-      this.assignments = assignments;
+
+      if (this.user.role === 'teacher'){
+        assignments = assignments.filter(x => x.enseignant._id === this.user._id);
+      }
+
       assignments.forEach(assignment => {
           this.ELEMENT_DATA_ASSIGNMENT.push(
             {
@@ -80,6 +91,13 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     // Tableau des devoirs des étudiants
     this.studentAssignmentsService.getStudentAssignments()
       .subscribe((studentAssignments: StudentAssignment[]) => {
+
+        if (this.user.role === 'student'){
+          studentAssignments = studentAssignments.filter(x => x.eleve._id === this.user._id);
+        }
+        else if (this.user.role === 'teacher'){
+          studentAssignments = studentAssignments.filter(x => x.assignment.enseignant._id === this.user._id);
+        }
 
         // appelé que quand les données sont prêtes
         studentAssignments.forEach(studentAssignment => {
@@ -187,5 +205,11 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
 
   editStudentAssignment(row): void{
     this.router.navigate(['/assignment/' + row.id]);
+  }
+
+  isAssignmentInTime(dateLimite: string): boolean{
+    const a = new Date(Date.now());
+    const b = new Date(dateLimite);
+    return a <= b;
   }
 }

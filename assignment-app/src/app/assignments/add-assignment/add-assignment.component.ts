@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../../models/assignment.model';
@@ -8,6 +8,7 @@ import {SubjectsService} from '../../shared/subjects.service';
 import {Subject} from '../../models/subjects.model';
 import {StudentAssignmentsService} from '../../shared/studentAssignments';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatSelect} from '@angular/material/select';
 
 @Component({
   selector: 'app-add-assignment',
@@ -27,6 +28,10 @@ export class AddAssignmentComponent implements OnInit {
   selectedStudents = [];
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+
+
+  @ViewChild('selectSubject') selectSubject: MatSelect;
+  @ViewChild('selectTeacher') selectTeacher: MatSelect;
 
   constructor(private formBuilder: FormBuilder, private assignmentsService: AssignmentsService,
               private studentAssignmentsService: StudentAssignmentsService,
@@ -76,10 +81,9 @@ export class AddAssignmentComponent implements OnInit {
     this.assignmentsService.addAssignment(data)
       .subscribe(response => {
         console.log(response.message);
+        // dire qu'on veut de nouveau afficher la liste
+        this.router.navigate(['/home']);
       });
-
-    // dire qu'on veut de nouveau afficher la liste
-    this.router.navigate(['/home']);
   }
 
   changeSubject(event): void{
@@ -91,5 +95,16 @@ export class AddAssignmentComponent implements OnInit {
 
   changeTeacher(event): void{
     this.selectedTeacher = event.value;
+  }
+
+  reset(event): void{
+    this.nomDevoir = null;
+    this.dateLimite = '';
+    this.selectedSubject = null;
+    this.selectedTeacher = null;
+    this.selectedStudents = [];
+
+    this.selectSubject.value = null;
+    this.selectTeacher.value = null;
   }
 }

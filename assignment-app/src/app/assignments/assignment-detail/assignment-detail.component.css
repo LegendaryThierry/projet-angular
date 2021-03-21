@@ -4,3 +4,10 @@
   margin:5px;
 }
 
+.greenBackground{
+  background-color: #aed581;
+}
+
+.redBackground{
+  background-color: #e57373;
+}
