@@ -1,8 +1,11 @@
 # Pour lancer l'application :
 
+Une démonstration vidéo est disponible en visionnant le lien suivant : https://youtu.be/PMl1y1UADfk
+
 1. Lancer l'API :
 	* ```cd api```
-	 * ```node server```
+    * ```npm install```
+    * ```node server```
 
 2. Lancer le site :
 	* ```cd assignment-app```

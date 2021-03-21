@@ -71,10 +71,13 @@ export class AssignmentsComponent implements OnInit, AfterViewInit{
     this.assignmentsService.getAssignments().subscribe((assignments: Assignment[]) => {
 
       if (this.user.role === 'teacher'){
-        assignments = assignments.filter(x => x.enseignant._id === this.user._id);
+        this.assignments = assignments.filter(x => x.enseignant._id === this.user._id);
+      }
+      else{
+        this.assignments = assignments;
       }
 
-      assignments.forEach(assignment => {
+      this.assignments.forEach(assignment => {
           this.ELEMENT_DATA_ASSIGNMENT.push(
             {
               _id: assignment._id,
